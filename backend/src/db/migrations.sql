@@ -157,3 +157,39 @@ INSERT OR IGNORE INTO services (name, description, base_price, additional_hour_p
 -- SEED: Usuário admin padrão (senha: admin123 - será hashada na prática)
 INSERT OR IGNORE INTO users (email, password, name, phone, role) VALUES
 ('admin@leidycleaner.com', '$2b$10$placeholder', 'Administrador', '5198030000', 'admin');
+-- TABELA: chat_messages (mensagens em tempo real)
+CREATE TABLE IF NOT EXISTS chat_messages (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  booking_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  user_role TEXT CHECK(user_role IN ('client', 'staff')),
+  message TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (booking_id) REFERENCES bookings(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- TABELA: booking_photos (fotos antes/depois)
+CREATE TABLE IF NOT EXISTS booking_photos (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  booking_id INTEGER NOT NULL,
+  photo_type TEXT CHECK(photo_type IN ('before', 'after')),
+  url TEXT NOT NULL,
+  uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (booking_id) REFERENCES bookings(id)
+);
+
+-- ÍNDICES PARA CHAT E FOTOS
+CREATE INDEX IF NOT EXISTS idx_chat_booking_id ON chat_messages(booking_id);
+CREATE INDEX IF NOT EXISTS idx_chat_user_id ON chat_messages(user_id);
+CREATE INDEX IF NOT EXISTS idx_chat_created_at ON chat_messages(created_at);
+CREATE INDEX IF NOT EXISTS idx_photos_booking_id ON booking_photos(booking_id);
+CREATE INDEX IF NOT EXISTS idx_photos_type ON booking_photos(photo_type);
+
+-- ADICIONAR CAMPOS AO BOOKINGS PARA REPOSTAS ADMIN
+ALTER TABLE bookings ADD COLUMN admin_response TEXT;
+ALTER TABLE bookings ADD COLUMN admin_response_at DATETIME;
+ALTER TABLE bookings ADD COLUMN staff_id INTEGER;
+ALTER TABLE bookings ADD COLUMN completed_at DATETIME;
+ALTER TABLE bookings ADD COLUMN photos_count INTEGER DEFAULT 0;
+ALTER TABLE bookings ADD FOREIGN KEY (staff_id) REFERENCES users(id);

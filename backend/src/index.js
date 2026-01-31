@@ -5,20 +5,36 @@
 
 const express = require('express');
 const cors = require('cors');
+const http = require('http');
+const socketIO = require('socket.io');
 require('dotenv').config();
 
 const apiRoutes = require('./routes/api');
 const webhookRoutes = require('./routes/webhooks');
 const adminRoutes = require('./routes/admin');
 const Scheduler = require('./utils/scheduler');
+const ChatService = require('./services/ChatService');
 const path = require('path');
 
 const app = express();
+const server = http.createServer(app);
+const io = socketIO(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
+
+// ===== CHAT SERVICE =====
+const chatService = new ChatService(io);
 
 // ===== MIDDLEWARE =====
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Servir arquivos estáticos (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, '..', '..', 'public')));
 
 // ===== ROUTES =====
 app.use('/api', apiRoutes);
@@ -33,6 +49,11 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
 });
 
+// ===== SERVE SPA =====
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', '..', 'public', 'index.html'));
+});
+
 // ===== ERROR HANDLING =====
 app.use((err, req, res, next) => {
   console.error('Erro:', err);
@@ -42,7 +63,7 @@ app.use((err, req, res, next) => {
 // ===== INICIALIZAÇÃO =====
 const PORT = process.env.PORT || 3001;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
   
   // Inicializar scheduler automático

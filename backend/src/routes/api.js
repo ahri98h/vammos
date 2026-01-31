@@ -28,12 +28,39 @@ const upload = multer({ storage });
 const BookingController = require('../controllers/BookingController');
 const PaymentController = require('../controllers/PaymentController');
 const ReviewController = require('../controllers/ReviewController');
+const AdminController = require('../controllers/AdminController');
+const StaffController = require('../controllers/StaffController');
+const PhotosController = require('../controllers/PhotosController');
+const PublicReviewsController = require('../controllers/PublicReviewsController');
+const AuthController = require('../controllers/AuthController');
 
 // Middleware
 const { authenticateToken, authorizeRole } = require('../middleware/auth');
 const { validateBookingData, validatePaymentData, validateReviewData } = require('../middleware/validation');
 
 // ===== BOOKINGS =====
+// ===== AUTH =====
+router.post('/auth/register', (req, res) => {
+  AuthController.register(req, res);
+});
+
+router.post('/auth/login', (req, res) => {
+  AuthController.login(req, res);
+});
+
+router.post('/auth/refresh', (req, res) => {
+  AuthController.refreshToken(req, res);
+});
+
+router.get('/auth/verify', authenticateToken, (req, res) => {
+  // retornar informações do usuário a partir do token
+  res.json({ success: true, user: req.user });
+});
+
+router.post('/auth/logout', authenticateToken, (req, res) => {
+  AuthController.logout(req, res);
+});
+
 router.post('/bookings', authenticateToken, validateBookingData, (req, res) => {
   BookingController.createBooking(req, res);
 });
@@ -85,6 +112,102 @@ router.get('/reviews/stats', (req, res) => {
 
 router.post('/reviews/:reviewId/response', authenticateToken, authorizeRole(['admin']), (req, res) => {
   ReviewController.respondToReview(req, res);
+});
+
+// ===== ADMIN DASHBOARD =====
+router.get('/admin/dashboard', authenticateToken, authorizeRole(['admin']), (req, res) => {
+  AdminController.getDashboard(req, res);
+});
+
+router.get('/admin/revenue-chart', authenticateToken, authorizeRole(['admin']), (req, res) => {
+  AdminController.getRevenueChart(req, res);
+});
+
+router.get('/admin/bookings-list', authenticateToken, authorizeRole(['admin']), (req, res) => {
+  AdminController.getBookingsList(req, res);
+});
+
+router.get('/admin/users-stats', authenticateToken, authorizeRole(['admin']), (req, res) => {
+  AdminController.getUsersStats(req, res);
+});
+
+router.get('/admin/reviews-stats', authenticateToken, authorizeRole(['admin']), (req, res) => {
+  AdminController.getReviewsStats(req, res);
+});
+
+router.get('/admin/upcoming-bookings', authenticateToken, authorizeRole(['admin']), (req, res) => {
+  AdminController.getUpcomingBookings(req, res);
+});
+
+router.get('/admin/staff-earnings/:staffId?', authenticateToken, authorizeRole(['admin']), (req, res) => {
+  AdminController.getStaffEarnings(req, res);
+});
+
+// ===== STAFF DASHBOARD =====
+router.get('/staff/dashboard', authenticateToken, authorizeRole(['staff']), (req, res) => {
+  StaffController.getDashboard(req, res);
+});
+
+router.get('/staff/dashboard/:staffId', authenticateToken, authorizeRole(['admin']), (req, res) => {
+  StaffController.getDashboard(req, res);
+});
+
+router.get('/staff/bookings-history', authenticateToken, authorizeRole(['staff']), (req, res) => {
+  StaffController.getBookingHistory(req, res);
+});
+
+router.get('/staff/earnings-by-period', authenticateToken, authorizeRole(['staff']), (req, res) => {
+  StaffController.getEarningsByPeriod(req, res);
+});
+
+router.post('/staff/bookings/:bookingId/confirm', authenticateToken, authorizeRole(['staff']), (req, res) => {
+  StaffController.confirmBooking(req, res);
+});
+
+router.post('/staff/bookings/:bookingId/complete', authenticateToken, authorizeRole(['staff']), (req, res) => {
+  StaffController.completeBooking(req, res);
+});
+
+router.get('/staff/payment-report', authenticateToken, authorizeRole(['staff']), (req, res) => {
+  StaffController.getPaymentReport(req, res);
+});
+
+// ===== FOTOS =====
+router.post('/bookings/:bookingId/photos', authenticateToken, upload.array('photos', 8), (req, res) => {
+  PhotosController.uploadPhotos(req, res);
+});
+
+router.get('/bookings/:bookingId/photos', authenticateToken, (req, res) => {
+  PhotosController.getBookingPhotos(req, res);
+});
+
+router.get('/gallery', (req, res) => {
+  PhotosController.getGallery(req, res);
+});
+
+router.delete('/photos/:photoId', authenticateToken, (req, res) => {
+  PhotosController.deletePhoto(req, res);
+});
+
+// ===== AVALIAÇÕES PÚBLICAS =====
+router.get('/public-reviews', (req, res) => {
+  PublicReviewsController.getPublicReviews(req, res);
+});
+
+router.get('/reviews-stats/public', (req, res) => {
+  PublicReviewsController.getReviewsStats(req, res);
+});
+
+router.get('/reviews/service/:serviceId', (req, res) => {
+  PublicReviewsController.getReviewsByService(req, res);
+});
+
+router.post('/reviews/public/:bookingId/respond', authenticateToken, authorizeRole(['admin']), (req, res) => {
+  PublicReviewsController.respondToReview(req, res);
+});
+
+router.get('/reviews/filter', (req, res) => {
+  PublicReviewsController.filterReviews(req, res);
 });
 
 module.exports = router;
