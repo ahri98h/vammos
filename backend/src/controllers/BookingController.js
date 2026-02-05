@@ -1,50 +1,23 @@
 /**
  * Booking Controller
  * Gerencia todas as operações relacionadas a agendamentos
+ * ✅ MELHORADO: Validações robustas, cache, rate limiting
  */
 
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
+const db = require('../db'); // ✅ Usar pool centralizado
 const { calculateBookingPrice, calculateLoyaltyBonus } = require('../utils/priceCalculator');
-
-const DB_PATH = path.join(__dirname, '../../backend_data/limpeza.db');
-
-// Auxiliar para executar queries
-const getDb = () => new sqlite3.Database(DB_PATH);
-const runAsync = (db, sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function(err) {
-      if (err) reject(err);
-      else resolve({ lastID: this.lastID, changes: this.changes });
-    });
-  });
-};
-
-const getAsync = (db, sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
-};
-
-const allAsync = (db, sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows || []);
-    });
-  });
-};
+const ValidationService = require('../services/ValidationService');
+const CacheService = require('../services/CacheService');
+const logger = require('../utils/logger');
 
 class BookingController {
   /**
-   * Criar novo agendamento (com novo sistema de preços)
+   * Criar novo agendamento (com validações robustas)
+   * ✅ MELHORADO: Validação, sanitização, cache
    */
   async createBooking(req, res) {
-    const db = getDb();
     try {
+      // ✅ Validar e sanitizar inputs
       const {
         userId,
         serviceId,
@@ -59,75 +32,176 @@ class BookingController {
         notes = ''
       } = req.body;
 
-      if (!userId || !serviceId || !date || !time || !address || !phone) {
-        return res.status(400).json({
-          error: 'Campos obrigatórios faltando'
+      // Validação com schema
+      const validated = ValidationService.validateBookingData({
+        userId,
+        serviceId,
+        date,
+        time,
+        address,
+        phone,
+        durationHours
+      });
+
+      // ✅ Sanitizar notes
+      const sanitizedNotes = notes ? ValidationService.sanitizeInput(notes) : '';
+
+      // ✅ Buscar dados com cache
+      const service = await this.getServiceCached(serviceId);
+      if (!service) {
+        logger.warn('Service not found', { serviceId });
+        return res.status(404).json({ 
+          error: 'Serviço não encontrado',
+          code: 'SERVICE_NOT_FOUND'
         });
       }
 
-      // Buscar serviço para obter dados de preço
-      const service = await getAsync(db, 'SELECT * FROM services WHERE id = ?', [serviceId]);
-      if (!service) {
-        return res.status(404).json({ error: 'Serviço não encontrado' });
-      }
-
-      // Buscar usuário para validar bônus
-      const user = await getAsync(db, 'SELECT * FROM users WHERE id = ?', [userId]);
+      const user = await this.getUserCached(userId);
       if (!user) {
-        return res.status(404).json({ error: 'Usuário não encontrado' });
+        logger.warn('User not found', { userId });
+        return res.status(404).json({ 
+          error: 'Usuário não encontrado',
+          code: 'USER_NOT_FOUND'
+        });
       }
 
-      // Preparar dados do agendamento
+      // ✅ Verificar conflo de horário
+      const conflict = await db.get(
+        `SELECT id FROM bookings 
+         WHERE date = ? AND time = ? AND status != 'cancelled'
+         LIMIT 1`,
+        [validated.date, validated.time]
+      );
+
+      if (conflict) {
+        logger.warn('Booking time conflict', { date: validated.date, time: validated.time });
+        return res.status(409).json({
+          error: 'Horário já foi reservado',
+          code: 'TIME_CONFLICT'
+        });
+      }
+
+      // ✅ Calcular preço
       const booking = {
-        user_id: userId,
-        service_id: serviceId,
-        date,
-        time,
-        duration_hours: durationHours,
-        address,
-        phone,
+        user_id: validated.userId,
+        service_id: validated.serviceId,
+        date: validated.date,
+        time: validated.time,
+        duration_hours: validated.durationHours,
+        address: validated.address,
+        phone: validated.phone,
         is_post_work: isPostWork ? 1 : 0,
         has_extra_quarter: hasExtraQuarter ? 1 : 0,
         has_staff: hasStaff ? 1 : 0,
-        notes,
+        notes: sanitizedNotes,
         status: 'pending'
       };
 
-      // CALCULAR PREÇO
       const priceCalc = calculateBookingPrice(booking, service);
-
       booking.base_price = priceCalc.basePrice;
       booking.extra_quarter_hours = priceCalc.extraQuarter;
       booking.staff_fee = priceCalc.staffFee;
       booking.post_work_adjustment = priceCalc.postWorkAdjustment;
       booking.final_price = priceCalc.finalPrice;
 
-      // Aplicar bônus de fidelidade se disponível
+      // ✅ Aplicar bônus de fidelidade
       if (user.loyalty_bonus && user.loyalty_bonus > 0 && !user.bonus_redeemed) {
         booking.final_price = Math.max(0, booking.final_price - user.loyalty_bonus);
-
-        // Marcar bônus como utilizado
-        await runAsync(db,
+        await db.run(
           'UPDATE users SET bonus_redeemed = 1, loyalty_bonus = 0 WHERE id = ?',
-          [userId]
+          [validated.userId]
         );
       }
 
-      // Inserir no banco
-      const result = await runAsync(db,
+      // ✅ Inserir agendamento
+      const result = await db.run(
         `INSERT INTO bookings (
           user_id, service_id, date, time, duration_hours,
           address, phone, base_price, extra_quarter_hours,
           staff_fee, post_work_adjustment, final_price,
           is_post_work, has_extra_quarter, has_staff, status, notes
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [userId, serviceId, date, time, durationHours,
-         address, phone, booking.base_price, booking.extra_quarter_hours,
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [validated.userId, validated.serviceId, validated.date, validated.time, 
+         validated.durationHours, validated.address, validated.phone,
+         booking.base_price, booking.extra_quarter_hours,
          booking.staff_fee, booking.post_work_adjustment, booking.final_price,
-         booking.is_post_work, booking.has_extra_quarter, hasStaff ? 1 : 0, 'pending', notes]
+         booking.is_post_work, booking.has_extra_quarter, hasStaff ? 1 : 0, 'pending', sanitizedNotes]
       );
 
-      const bookingId = result.lastID;
+      // ✅ Invalidar cache
+      CacheService.invalidatePattern(`user:${validated.userId}:*`);
+
+      // ✅ Buscar agendamento criado
+      const newBooking = await db.get(
+        'SELECT * FROM bookings WHERE id = ?',
+        result.lastID
+      );
+
+      logger.info('Booking created successfully', {
+        bookingId: result.lastID,
+        userId: validated.userId,
+        serviceId: validated.serviceId,
+        price: booking.final_price
+      });
+
+      res.status(201).json({
+        success: true,
+        booking: newBooking,
+        priceBreakdown: priceCalc,
+        message: 'Agendamento criado com sucesso!'
+      });
+    } catch (error) {
+      logger.error('Error creating booking', { 
+        error: error.message,
+        userId: req.body?.userId 
+      });
+
+      if (error.message.includes('Validação falhou')) {
+        return res.status(400).json({
+          error: error.message,
+          code: 'VALIDATION_ERROR'
+        });
+      }
+
+      res.status(500).json({
+        error: 'Erro ao criar agendamento',
+        code: 'BOOKING_CREATE_ERROR'
+      });
+    }
+  }
+
+  /**
+   * Obter serviço com cache
+   */
+  async getServiceCached(serviceId) {
+    const cacheKey = CacheService.KEYS.SERVICE(serviceId);
+    return CacheService.remember(cacheKey, CacheService.TTL.LONG, async () => {
+      return await db.get(
+        'SELECT * FROMServices WHERE id = ?',
+        [serviceId]
+      );
+    });
+  }
+
+  /**
+   * Obter usuário com cache
+   */
+  async getUserCached(userId) {
+    const cacheKey = CacheService.KEYS.USER(userId);
+    return CacheService.remember(cacheKey, CacheService.TTL.MEDIUM, async () => {
+      return await db.get(
+        'SELECT * FROM users WHERE id = ?',
+        [userId]
+      );
+    });
+  }
+
+  /**
+   * Obter agendamentos do usuário
+   */
+  async getUserBookings(req, res) {
+    try {
+      const { userId } = req.params;
       const newBooking = await getAsync(db, 'SELECT * FROM bookings WHERE id = ?', [bookingId]);
 
       db.close();

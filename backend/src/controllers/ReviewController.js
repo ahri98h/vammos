@@ -1,40 +1,13 @@
 /**
  * Review Controller
  * Gerencia avaliações e depoimentos
+ * ✅ MELHORADO: Validações robustas, cache, sanitização
  */
 
-const sqlite3 = require('sqlite3').verbose();
-const path = require('path');
-
-const DB_PATH = path.join(__dirname, '../../backend_data/limpeza.db');
-
-const getDb = () => new sqlite3.Database(DB_PATH);
-const runAsync = (db, sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function(err) {
-      if (err) reject(err);
-      else resolve({ lastID: this.lastID, changes: this.changes });
-    });
-  });
-};
-
-const getAsync = (db, sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.get(sql, params, (err, row) => {
-      if (err) reject(err);
-      else resolve(row);
-    });
-  });
-};
-
-const allAsync = (db, sql, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows || []);
-    });
-  });
-};
+const db = require('../db'); // ✅ Usar pool centralizado
+const ValidationService = require('../services/ValidationService');
+const CacheService = require('../services/CacheService');
+const logger = require('../utils/logger');
 
 class ReviewController {
   /**
