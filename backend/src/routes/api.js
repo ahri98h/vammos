@@ -450,6 +450,65 @@ router.get('/cdn/optimization-report', authenticateToken, authorizeRole(['admin'
   CDNAssetController.getOptimizationReport(req, res);
 });
 
+// ===== PHASE 2: ADVANCED FEATURES =====
+
+// ===== SEARCH & DISCOVERY =====
+const SearchController = require('../controllers/SearchController');
+router.use('/search', SearchController);
+
+// ===== ANALYTICS DASHBOARD =====
+const AnalyticsController = require('../controllers/AnalyticsController');
+router.use('/analytics', authenticateToken, authorizeRole(['admin']), AnalyticsController);
+
+// ===== RECURRING BOOKINGS =====
+const RecurringBookingController = require('../controllers/RecurringBookingController');
+router.use('/bookings/recurring', authenticateToken, RecurringBookingController);
+
+// ===== PRICE HISTORY & FORECASTING =====
+const PriceHistoryController = require('../controllers/PriceHistoryController');
+router.use('/prices', authenticateToken, PriceHistoryController);
+
+// ===== PERSONALIZED RECOMMENDATIONS =====
+const RecommendationController = require('../controllers/RecommendationController');
+router.use('/recommendations', authenticateToken, RecommendationController);
+
+// ===== PAYMENT INTEGRATION (Stripe + PIX) =====
+const PaymentIntegrationController = require('../controllers/PaymentIntegrationController');
+router.use('/payments', authenticateToken, PaymentIntegrationController);
+
+// ===== SMART PUSH NOTIFICATIONS =====
+const PushNotificationController = require('../controllers/PushNotificationController');
+router.use('/push-notifications', authenticateToken, PushNotificationController);
+
+// ===== REFERRAL PROGRAM =====
+const ReferralController = require('../controllers/ReferralController');
+router.use('/referrals', authenticateToken, ReferralController);
+
+// ===== AUTO-SCHEDULING & ROUTE OPTIMIZATION =====
+const AutoSchedulingController = require('../controllers/AutoSchedulingController');
+router.use('/scheduling', authenticateToken, authorizeRole(['admin', 'staff']), AutoSchedulingController);
+
+// ===== SEO & MARKETING =====
+const SEOMarketingController = require('../controllers/SEOMarketingController');
+router.use('/seo', SEOMarketingController);
+router.use('/marketing', authenticateToken, authorizeRole(['admin']), SEOMarketingController);
+
+// ===== BACKUP & DISASTER RECOVERY =====
+const BackupController = require('../controllers/BackupController');
+router.use('/backup', authenticateToken, authorizeRole(['admin']), BackupController);
+
+// ===== REVIEW IMAGES & GALLERY =====
+const ReviewImageController = require('../controllers/ReviewImageController');
+router.use('/reviews', ReviewImageController);
+
+// ===== REPORTS & EXPORTS =====
+const ReportsController = require('../controllers/ReportsController');
+router.use('/reports', authenticateToken, authorizeRole(['admin']), ReportsController);
+
+// ===== SMART NOTIFICATIONS =====
+const SmartNotificationController = require('../controllers/SmartNotificationController');
+router.use('/smart-notifications', authenticateToken, SmartNotificationController);
+
 // ===== ADMIN DASHBOARD =====
 const adminRoutes = require('./adminRoutes');
 router.use('/admin', authenticateToken, authorizeRole(['admin']), adminRoutes);
