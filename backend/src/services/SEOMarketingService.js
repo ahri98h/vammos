@@ -221,7 +221,7 @@ class SEOMarketingService {
           { keyword: 'agendamento profissionais', position: 5, volume: 800 }
         ],
         backlinks: 42,
-        domain-authority: 28
+        domainAuthority: 28
       },
       suggestions: [
         'Adicionar mais conteúdo sobre "limpeza residencial"',

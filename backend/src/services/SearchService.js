@@ -212,7 +212,7 @@ class SearchService {
    */
   async getPopularSearches() {
     return {
-      popula r: [
+      popular: [
         'limpeza residencial São Paulo',
         'limpeza urgent',
         'limpeza econômica',

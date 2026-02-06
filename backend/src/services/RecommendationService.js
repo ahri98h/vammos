@@ -98,7 +98,7 @@ class RecommendationService {
             daysSince: Math.floor(
               (new Date() - lastBooking.completedAt) / (1000 * 60 * 60 * 24)
             ),
-            lifetime Value: history.reduce((s, b) => s + (b.price || 0), 0)
+            lifetimeValue: history.reduce((s, b) => s + (b.price || 0), 0)
           });
         }
       }
@@ -130,7 +130,7 @@ class RecommendationService {
       currentService: currentServiceId,
       recommendations: recommended.map((service, idx) => ({
         serviceId: service,
-        cross sell: true,
+        crossSell: true,
         estimatedAdditionalRevenue: `R$ ${(50 + idx * 25).toFixed(2)}`
       }))
     };
