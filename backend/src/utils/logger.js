@@ -1,5 +1,5 @@
 const { createLogger, format, transports } = require('winston');
-const { combine, timestamp, printf, colorize, errors, json } = format;
+const { combine, timestamp, printf, colorize } = format;
 const path = require('path');
 const fs = require('fs');
 
@@ -19,10 +19,10 @@ const myFormat = printf(({ level, message, timestamp, stack, requestId, userId, 
   return output;
 });
 
-// ✅ NOVO: Formato JSON para estruturado
-const jsonFormat = format.combine(
-  format.timestamp(),
-  format.json()
+// ✅ NOVO: Formato JSON para estruturado (usar simples format de linha em vez de JSON para evitar issues com Winston)
+const jsonFormat = combine(
+  timestamp(),
+  myFormat
 );
 
 // ✅ NOVO: Tentar usar daily-rotate-file se disponível
@@ -39,7 +39,6 @@ const logTransports = [
   // Console com cores para desenvolvimento
   new transports.Console({
     format: combine(
-      errors({ stack: true }),
       timestamp(),
       colorize({ all: true }),
       myFormat
@@ -102,7 +101,6 @@ if (rotateFile) {
 const logger = createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: combine(
-    errors({ stack: true }),
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' })
   ),
   defaultMeta: { service: 'avante-api' },

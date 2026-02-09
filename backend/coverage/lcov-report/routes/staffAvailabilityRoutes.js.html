@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>10/15</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>10/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -108,37 +108,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Staff Availability Routes
  * GET /api/staff/available - Lista staff com scores
@@ -146,37 +146,37 @@
  * POST /api/staff/:staffId/set-status - Marca status
  */
 &nbsp;
-const express = <span class="cstat-no" title="statement not covered" >require('express');</span>
-const router = <span class="cstat-no" title="statement not covered" >express.Router();</span>
-const StaffAvailabilityController = <span class="cstat-no" title="statement not covered" >require('../controllers/StaffAvailabilityController');</span>
-const { authenticateToken, authorizeRole } = <span class="cstat-no" title="statement not covered" >require('../middleware/auth');</span>
+const express = require('express');
+const router = express.Router();
+const StaffAvailabilityController = require('../controllers/StaffAvailabilityController');
+const { authenticateToken, authorizeRole } = require('../middleware/auth');
 &nbsp;
 // ===== PUBLIC ENDPOINTS (sem autenticação) =====
 // Clientes veem staff disponível durante agendamento
-<span class="cstat-no" title="statement not covered" >router.get('/available', <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {</span>
+router.get('/available', <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >  StaffAvailabilityController.getAvailableStaff(req, res);</span>
 });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.get('/:staffId/availability-status', <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {</span>
+router.get('/:staffId/availability-status', <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >  StaffAvailabilityController.getAvailabilityStatus(req, res);</span>
 });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >router.get('/shift-assignments/suggestions', <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {</span>
+router.get('/shift-assignments/suggestions', <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >  StaffAvailabilityController.getShiftAssignments(req, res);</span>
 });
 &nbsp;
 // ===== AUTHENTICATED ENDPOINTS (staff only) =====
 // Ver seu próprio calendário
-<span class="cstat-no" title="statement not covered" >router.get('/:staffId/calendar', authenticateToken, authorizeRole(['staff', 'admin']), <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {</span>
+router.get('/:staffId/calendar', authenticateToken, authorizeRole(['staff', 'admin']), <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >  StaffAvailabilityController.getWeeklyCalendar(req, res);</span>
 });
 &nbsp;
 // Mudar seu status (available/busy/offline)
-<span class="cstat-no" title="statement not covered" >router.post('/:staffId/set-status', authenticateToken, authorizeRole(['staff']), <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {</span>
+router.post('/:staffId/set-status', authenticateToken, authorizeRole(['staff']), <span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; {
 <span class="cstat-no" title="statement not covered" >  StaffAvailabilityController.setStatus(req, res);</span>
 });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >module.exports = router;</span>
+module.exports = router;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -184,7 +184,7 @@ const { authenticateToken, authorizeRole } = <span class="cstat-no" title="state
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T17:40:55.709Z
+                at 2026-02-09T18:44:08.290Z
             </div>
         <script src="../prettify.js"></script>
         <script>

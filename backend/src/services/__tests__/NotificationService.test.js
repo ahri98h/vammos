@@ -21,10 +21,10 @@ jest.mock('nodemailer', () => ({
   })
 }));
 
-// Mock node-schedule
+// Mock node-schedule (opcional, pode não estar instalado)
 jest.mock('node-schedule', () => ({
   scheduleJob: jest.fn()
-}));
+}), { virtual: true });
 
 // Mock database
 const mockDb = {

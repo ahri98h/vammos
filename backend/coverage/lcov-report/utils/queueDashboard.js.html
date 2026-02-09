@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -129,11 +129,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -146,35 +146,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
@@ -186,11 +186,11 @@
  * Acesso: http://localhost:3001/queues (durante desenvolvimento)
  */
 &nbsp;
-const express = <span class="cstat-no" title="statement not covered" >require('express');</span>
-const { createBullBoard } = <span class="cstat-no" title="statement not covered" >require('@bull-board/express');</span>
-const { BullAdapter } = <span class="cstat-no" title="statement not covered" >require('@bull-board/api/bullAdapter');</span>
-const EmailQueueService = <span class="cstat-no" title="statement not covered" >require('../services/EmailQueueService');</span>
-const logger = <span class="cstat-no" title="statement not covered" >require('../utils/logger');</span>
+const express = require('express');
+const { createBullBoard } = require('@bull-board/express');
+const { BullAdapter } = require('@bull-board/api/bullAdapter');
+const EmailQueueService = require('../services/EmailQueueService');
+const logger = require('../utils/logger');
 &nbsp;
 /**
  * Registrar dashboard Bull Board em uma aplicação Express
@@ -202,15 +202,15 @@ const logger = <span class="cstat-no" title="statement not covered" >require('..
  * @param {express.Application} app - Aplicação Express
  * @param {string} basePath - Caminho base do dashboard (padrão: /queues)
  */
-function <span class="fstat-no" title="function not covered" >setupEmailQueueDashboard(</span>app, basePath = <span class="branch-0 cbranch-no" title="branch not covered" >'/queues')</span> {
-<span class="cstat-no" title="statement not covered" >  try {</span>
+function setupEmailQueueDashboard(app, basePath = <span class="branch-0 cbranch-no" title="branch not covered" >'/queues')</span> {
+  try {
     // Criar adaptador Bull Board
-    const bullBoardAdapters = <span class="cstat-no" title="statement not covered" >[</span>
+    const bullBoardAdapters = [
       new BullAdapter(EmailQueueService.queue),
     ];
 &nbsp;
     // Criar dashboard
-    const { router } = <span class="cstat-no" title="statement not covered" >createBullBoard({</span>
+    const { router } = createBullBoard({
       queues: bullBoardAdapters,
       serverAdapter: {
         baseUrl: basePath,
@@ -225,13 +225,13 @@ function <span class="fstat-no" title="function not covered" >setupEmailQueueDas
     // Retornar router para propósitos de teste/desacoplamento
 <span class="cstat-no" title="statement not covered" >    return router;</span>
   } catch (error) {
-<span class="cstat-no" title="statement not covered" >    logger.error('❌ Erro ao configurar dashboard de filas', { error: error.message });</span>
+    logger.error('❌ Erro ao configurar dashboard de filas', { error: error.message });
     // Continuar sem dashboard se falhar
-<span class="cstat-no" title="statement not covered" >    return null;</span>
+    return null;
   }
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >module.exports = {</span>
+module.exports = {
   setupEmailQueueDashboard,
 };
 &nbsp;</pre></td></tr></table></pre>
@@ -241,7 +241,7 @@ function <span class="fstat-no" title="function not covered" >setupEmailQueueDas
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-09T17:40:55.709Z
+                at 2026-02-09T18:44:08.290Z
             </div>
         <script src="../prettify.js"></script>
         <script>
