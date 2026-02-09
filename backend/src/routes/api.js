@@ -355,10 +355,6 @@ router.use('/affiliates', authenticateToken, affiliateRoutes);
 const paymentRoutes = require('./paymentRoutes');
 router.use('/payments', paymentRoutes);
 
-// ===== ADMIN PANEL =====
-const adminRoutes = require('./adminRoutes');
-router.use('/admin', adminRoutes);
-
 // ===== CHAT MESSAGES & HISTORY =====
 const chatMessagesRoutes = require('./chatMessagesRoutes');
 router.use('/chat', chatMessagesRoutes);
@@ -591,10 +587,6 @@ router.post('/pricing/calculate', (req, res) => {
 router.get('/pricing/simulate', (req, res) => {
   PricingController.simulatePriceOptions(req, res);
 });
-
-// ===== PAYMENTS (Stripe Integration) =====
-const paymentRoutes = require('./paymentRoutes');
-router.use('/payments', paymentRoutes);
 
 // ===== HOUR PACKAGING (Novos Endpoints Pagamento em Horas) =====
 const hourPricingRoutes = require('./hourPricingRoutes');

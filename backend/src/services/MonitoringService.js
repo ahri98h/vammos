@@ -11,14 +11,21 @@
  */
 
 const Sentry = require('@sentry/node');
-const newrelic = require('newrelic');
+let newrelic = null;
+try {
+  if (process.env.NEW_RELIC_ENABLED === 'true' || process.env.NEW_RELIC_LICENSE_KEY) {
+    newrelic = require('newrelic');
+  }
+} catch (error) {
+  // New Relic is optional
+}
 const logger = require('../utils/logger');
 
 class MonitoringService {
   constructor() {
     this.initialized = false;
     this.sentryEnabled = process.env.SENTRY_DSN !== undefined;
-    this.newrelicEnabled = process.env.NEW_RELIC_APP_NAME !== undefined;
+    this.newrelicEnabled = newrelic !== null && process.env.NEW_RELIC_APP_NAME !== undefined;
   }
 
   /**

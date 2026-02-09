@@ -6,7 +6,7 @@ const express = require('express');
 const router = express.Router();
 const PaymentService = require('../services/PaymentService');
 const HourPackagingService = require('../services/HourPackagingService');
-const auth = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
@@ -17,7 +17,7 @@ const DB_PATH = path.join(__dirname, '../../backend_data/database.db');
  * POST /api/payments/create-checkout
  * Criar sessão de checkout Stripe
  */
-router.post('/create-checkout', auth, async (req, res) => {
+router.post('/create-checkout', authenticateToken, async (req, res) => {
   try {
     const { hourPackage } = req.body;
     const userId = req.user.id;
@@ -146,7 +146,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
  * GET /api/payments/transactions
  * Listar transações do usuário
  */
-router.get('/transactions', auth, async (req, res) => {
+router.get('/transactions', authenticateToken, async (req, res) => {
   try {
     const sessions = await PaymentService.getUserTransactions(req.user.id);
 
@@ -176,7 +176,7 @@ router.get('/transactions', auth, async (req, res) => {
  * POST /api/payments/refund
  * Solicitar reembolso
  */
-router.post('/refund', auth, async (req, res) => {
+router.post('/refund', authenticateToken, async (req, res) => {
   try {
     const { sessionId, reason } = req.body;
 

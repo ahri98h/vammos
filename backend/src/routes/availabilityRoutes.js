@@ -5,7 +5,7 @@
 const express = require('express');
 const router = express.Router();
 const AvailabilityService = require('../services/AvailabilityService');
-const auth = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 
 /**
  * GET /api/availability/slots/:professionalId?date=2026-02-15&duration=2
@@ -116,7 +116,7 @@ router.post('/validate', async (req, res) => {
  * POST /api/availability/block
  * Bloquear um horário (admin only)
  */
-router.post('/block', auth, async (req, res) => {
+router.post('/block', authenticateToken, async (req, res) => {
   try {
     if (req.user?.role !== 'admin') {
       return res.status(403).json({

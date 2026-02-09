@@ -5,13 +5,13 @@
 const express = require('express');
 const router = express.Router();
 const ReviewService = require('../services/ReviewService');
-const auth = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 
 /**
  * POST /api/reviews
  * Criar nova avaliação
  */
-router.post('/', auth, async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
   try {
     const { bookingId, rating, comment, photos } = req.body;
 
@@ -98,7 +98,7 @@ router.get('/stats/:professionalId', async (req, res) => {
  * PATCH /api/reviews/:id/approve
  * Aprovar review (admin)
  */
-router.patch('/:id/approve', auth, async (req, res) => {
+router.patch('/:id/approve', authenticateToken, async (req, res) => {
   try {
     if (req.user?.role !== 'admin') {
       return res.status(403).json({
