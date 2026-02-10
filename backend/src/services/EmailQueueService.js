@@ -56,6 +56,8 @@ class EmailQueueService {
     this.monitoringService = MonitoringService; // MonitoringService é um singleton
     this.setupProcessors();
     this.setupEventListeners();
+    this._queueFailureCount = 0;
+    this._queueFailureLastLoggedAt = null;
   }
 
   /**
@@ -530,7 +532,21 @@ class EmailQueueService {
           });
         }
       } catch (error) {
-        logger.error('❌ Erro no health check da fila', { error: error.message });
+        // Evitar logs repetitivos — incrementar contador e logar apenas em eventos
+        // significativos: primeira ocorrência, após 1 hora, ou a cada 10 falhas.
+        try {
+          this._queueFailureCount = (this._queueFailureCount || 0) + 1;
+          const now = Date.now();
+          const last = this._queueFailureLastLoggedAt || 0;
+
+          if (this._queueFailureCount === 1 || (now - last) > 60 * 60 * 1000 || this._queueFailureCount % 10 === 0) {
+            logger.error('❌ Erro no health check da fila', { error: error.message, count: this._queueFailureCount });
+            this._queueFailureLastLoggedAt = now;
+          }
+        } catch (e) {
+          // fallback: se qualquer coisa der errado, logar normalmente
+          logger.error('❌ Erro no health check da fila', { error: error.message });
+        }
       }
     }, 60000); // A cada 1 minuto
   }

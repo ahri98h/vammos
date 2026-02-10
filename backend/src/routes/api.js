@@ -579,10 +579,6 @@ router.use('/2fa', Advanced2FAController);
 const staffAvailabilityRoutes = require('./staffAvailabilityRoutes');
 router.use('/staff', staffAvailabilityRoutes);
 
-// ===== BULL BOARD (fila dashboard) =====
-const bullBoardRoutes = require('./bullBoard');
-router.use('/admin/queues', authenticateToken, authorizeRole(['admin']), bullBoardRoutes);
-
 // ===== DYNAMIC PRICING =====
 const PricingController = require('../controllers/PricingController');
 router.post('/pricing/calculate', (req, res) => {

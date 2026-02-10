@@ -5,13 +5,14 @@
 
 const Sentry = require('@sentry/node');
 const { ProfilingIntegration } = require('@sentry/profiling-node');
+const logger = require('../utils/logger');
 
 function initializeSentry(app) {
   const sentryDsn = process.env.SENTRY_DSN;
   const environment = process.env.NODE_ENV || 'development';
 
   if (!sentryDsn) {
-    console.warn('⚠️  Sentry DSN não configurado. Error tracking desabilitado.');
+    logger.warn('⚠️  Sentry DSN não configurado. Error tracking desabilitado.');
     return;
   }
 
@@ -48,7 +49,7 @@ function initializeSentry(app) {
         (hint.originalException.message?.includes('ENotFound') ||
           hint.originalException.message?.includes('ECONNREFUSED'))
       ) {
-        console.warn('⚠️  Ignorando erro esperado:', hint.originalException.message);
+        logger.warn('⚠️  Ignorando erro esperado:', hint.originalException.message);
         return null;
       }
 
@@ -72,7 +73,7 @@ function initializeSentry(app) {
   // Middleware de erro para Sentry
   app.use(Sentry.Handlers.errorHandler());
 
-  console.log('✅ Sentry inicializado com sucesso (DSN:', sentryDsn.split('@')[0] + '...)', ')');
+  logger.info('✅ Sentry inicializado com sucesso (DSN: ' + (sentryDsn.split('@')[0] || '') + '...)');
   return Sentry;
 }
 

@@ -48,15 +48,15 @@ async function runEncryptionMigrations() {
     for (const statement of statements) {
       try {
         db.run(statement);
-        console.log(`✓ ${statement.substring(0, 50)}...`);
+        logger.info(`✓ ${statement.substring(0, 50)}...`);
       } catch (err) {
         if (!err.message.includes('already exists') && !err.message.includes('duplicate')) {
-          console.warn(`⚠ ${err.message}`);
+          logger.warn(`⚠ ${err.message}`);
         }
       }
     }
 
-    console.log('✅ Encryption migrations completed');
+    logger.info('✅ Encryption migrations completed');
   } catch (error) {
     console.error('Encryption migrations failed:', error);
   }

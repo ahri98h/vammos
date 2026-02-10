@@ -247,7 +247,7 @@ class AuthController {
       }
 
       // Verificar senha
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      const passwordMatch = await bcrypt.compare(password, user.password_hash);
       if (!passwordMatch) {
         return res.status(401).json({
           error: 'Email ou senha incorretos'

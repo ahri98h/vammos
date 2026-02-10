@@ -545,10 +545,12 @@
     const loginBtn = document.getElementById('loginBtn');
     const alertContainer = document.getElementById('alertContainer');
 
-    // Credenciais de teste
+    // Credenciais de teste (REMOVIDAS) — não deixar credenciais em arquivos públicos.
+    // Defina um fluxo de autenticação real via API. Para testes locais, use o endpoint
+    // de autenticação do backend ou configure variáveis de ambiente no servidor.
     const ADMIN_CREDS = {
-      email: 'admin@limpezapro.com',
-      password: 'Admin@123456789!'
+      email: '<PLACEHOLDER_ADMIN_EMAIL>',
+      password: '<PLACEHOLDER_ADMIN_PASSWORD>'
     };
 
     form.addEventListener('submit', async (e) => {
