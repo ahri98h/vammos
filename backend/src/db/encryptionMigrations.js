@@ -1,0 +1,64 @@
+/**
+ * Database encryption migrations
+ * Adiciona coluna para armazenar dados criptografados
+ */
+
+const db = require('./index');
+
+const ENCRYPTION_MIGRATIONS = `
+-- Tabela de rastreamento de criptografia
+CREATE TABLE IF NOT EXISTS encryption_audit (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  table_name TEXT NOT NULL,
+  column_name TEXT NOT NULL,
+  encrypted_count INTEGER DEFAULT 0,
+  last_encrypted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Adicionar coluna encrypted a users (se não existir)
+CREATE TABLE IF NOT EXISTS users_backup AS SELECT * FROM users;
+
+-- Migração: CPF e birth_date para encrypted in users
+ALTER TABLE users ADD COLUMN cpf_encrypted TEXT;
+ALTER TABLE users ADD COLUMN birth_date_encrypted TEXT;
+
+-- Índices para busca por CPF (hash)
+CREATE INDEX IF NOT EXISTS idx_users_cpf_hash ON users(cpf_hash);
+
+-- Tabela de Bookings com endereco criptografado
+ALTER TABLE bookings ADD COLUMN address_encrypted TEXT;
+ALTER TABLE bookings ADD COLUMN notes_encrypted TEXT;
+
+-- Tabela de Payments com card token
+ALTER TABLE payments ADD COLUMN card_token_encrypted TEXT;
+
+-- Índice de performance
+CREATE INDEX IF NOT EXISTS idx_encryption_audit_table ON encryption_audit(table_name);
+`;
+
+async function runEncryptionMigrations() {
+  try {
+    console.log('Running encryption migrations...');
+    const statements = ENCRYPTION_MIGRATIONS.split(';')
+      .map((stmt) => stmt.trim())
+      .filter((stmt) => stmt.length > 0);
+
+    for (const statement of statements) {
+      try {
+        db.run(statement);
+        console.log(`✓ ${statement.substring(0, 50)}...`);
+      } catch (err) {
+        if (!err.message.includes('already exists') && !err.message.includes('duplicate')) {
+          console.warn(`⚠ ${err.message}`);
+        }
+      }
+    }
+
+    console.log('✅ Encryption migrations completed');
+  } catch (error) {
+    console.error('Encryption migrations failed:', error);
+  }
+}
+
+module.exports = { runEncryptionMigrations };

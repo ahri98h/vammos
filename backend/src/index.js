@@ -24,6 +24,13 @@ const path = require('path');
 const { initCsrf } = require('./middleware/csrf');
 const { setupEmailQueueDashboard } = require('./utils/queueDashboard');
 const { ensureSchema } = require('./db/ensureSchema');
+const { validateEnv } = require('./config/envValidator');
+const { globalErrorHandler, handle404, asyncHandler } = require('./middleware/globalErrorHandler');
+const { initializeSwagger } = require('./config/swagger');
+const { metricsMiddleware, metricsEndpoint } = require('./config/prometheus');
+
+// ===== VALIDATE ENVIRONMENT =====
+validateEnv();
 
 const app = express();
 // ✅ CORRIGIDO: trust proxy configurado apenas se em produção com proxy real
@@ -201,7 +208,20 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '..', 'public', 'index.html'));
 });
 
+// ===== METRICS & MONITORING =====
+app.use(metricsMiddleware);
+app.get('/metrics', metricsEndpoint);
+
+// ===== SWAGGER DOCUMENTATION =====
+initializeSwagger(app);
+
 // ===== ERROR HANDLING =====
+// 404 Handler
+app.use(handle404);
+
+// Global Error Handler (deve ser último)
+app.use(globalErrorHandler);
+
 if (app.locals.monitoring && typeof app.locals.monitoring.setupErrorHandler === 'function') {
   app.locals.monitoring.setupErrorHandler(app);
 } else {
