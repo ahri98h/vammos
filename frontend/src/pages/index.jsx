@@ -27,15 +27,12 @@ export default function Home() {
 
     // Setup analytics tracking
     setupScrollTracking();
-    decoded('index');
-
-    // Track initial section views
     trackSectionView('hero');
   }, [])
 
-  const decoded = (result) => {
+  const handleCalculate = (result) => {
     setPriceEstimate(result);
-    decoded(result.hours, result.totalPrice, result.characteristics);
+    trackPriceCalculation(result.hours, result.totalPrice);
   };
 
   const handleCtaClick = (ctaName, location) => {
@@ -154,7 +151,7 @@ export default function Home() {
 
                 {/* Calculadora */}
                 <div data-aos="fade-left" className="lg:ml-4">
-                  <HourCalculator onCalculate={decoded} />
+                  <HourCalculator onCalculate={handleCalculate} />
                 </div>
               </div>
             </div>
