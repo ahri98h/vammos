@@ -8,8 +8,8 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 
-// garantir pasta uploads
-const uploadDir = path.join(__dirname, '..', '..', 'backend', 'uploads');
+// garantir pasta uploads (usar backend_data, que é gravável no container de dev)
+const uploadDir = path.join(__dirname, '..', '..', 'backend_data', 'uploads');
 const fs = require('fs');
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -51,6 +51,7 @@ const AutoPlaceholderController = require('../../src/controllers/AutoPlaceholder
 const ChatController = require('../controllers/ChatController');
 const CDNAssetController = require('../controllers/CDNAssetController');
 const AuthController = require('../controllers/AuthController');
+const ProfileController = require('../controllers/ProfileController');
 // other controllers with masked names now route to AutoPlaceholderController
 
 // Middleware
@@ -275,9 +276,14 @@ router.get('/reviews/filter', (req, res) => {
 // const ProfileController = require('../controllers/ProfileController');
 
 // Profile routes
-router.get('/profile/current', authenticateToken, (req, res) => {
-  req.params.userId = req.user.id;
-  ProfileController.getProfile(req, res);
+router.get('/profile/current', authenticateToken, async (req, res) => {
+  try {
+    req.params.userId = req.user.id;
+    await ProfileController.getProfile(req, res);
+  } catch (err) {
+    logger.error('Error in profile/current route:', err);
+    res.status(500).json({ error: 'Erro ao buscar perfil' });
+  }
 });
 
 router.get('/profile/:userId', (req, res) => {

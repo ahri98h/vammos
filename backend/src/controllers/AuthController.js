@@ -153,21 +153,45 @@ class AuthController {
         }
       }
 
-      // Inserir usuário no banco
+      // Inserir usuário no banco (compatível com schema de dev: password_hash)
       const result = await db.run(
         `INSERT INTO users (
-          email, password, name, phone, cpf_cnpj, role,
-          address, city, state, zip_code,
-          company_name, company_cnpj, company_address, company_phone,
-          bank_account, bank_routing, is_active
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)`,
-        email, hashedPassword, name, phone, cpf_cnpj, role,
-        address, city, state, zip_code,
-        company_name, company_cnpj, company_address, company_phone,
-        bank_account, bank_routing
+          email, password_hash, name, phone, role, is_active
+        ) VALUES (?, ?, ?, ?, ?, 1)`,
+        email, hashedPassword, name, phone, role
       );
 
-      const userId = result.lastID;
+      const userId = result.lastID || result.lastId || (result.rows && result.rows[0] && result.rows[0].id) || null;
+
+      // Atualizar campos opcionais (tentar aplicar se existirem nas colunas)
+      try {
+        const updateFields = {};
+        if (cpf_cnpj) updateFields.cpf_cnpj = cpf_cnpj;
+        if (address) updateFields.address = address;
+        if (city) updateFields.city = city;
+        if (state) updateFields.state = state;
+        if (zip_code) updateFields.zip_code = zip_code;
+        if (company_name) updateFields.company_name = company_name;
+        if (company_cnpj) updateFields.company_cnpj = company_cnpj;
+        if (company_address) updateFields.company_address = company_address;
+        if (company_phone) updateFields.company_phone = company_phone;
+        if (bank_account) updateFields.bank_account = bank_account;
+        if (bank_routing) updateFields.bank_routing = bank_routing;
+
+        const keys = Object.keys(updateFields);
+        if (keys.length > 0 && userId) {
+          const setClause = keys.map(k => `${k} = ?`).join(', ');
+          const values = keys.map(k => updateFields[k]);
+          // Envolver em try/catch: se a coluna não existir, ignoramos
+          try {
+            await db.run(`UPDATE users SET ${setClause}, updated_at = CURRENT_TIMESTAMP WHERE id = ?`, ...values, userId);
+          } catch (e) {
+            // Ignore possíveis erros por colunas ausentes
+          }
+        }
+      } catch (e) {
+        // Não falhar o registro por causa de campos opcionais
+      }
 
       // Gerar tokens
       const accessToken = jwt.sign(
@@ -208,9 +232,12 @@ class AuthController {
       });
 
     } catch (error) {
-      console.error('Erro no registro:', error);
+      console.error('Erro no registro:', error.stack || error);
+      logger.error('Erro no registro:', error.stack || error.toString());
+      // Em ambiente local, retornar detalhe para facilitar debugging
       res.status(500).json({
-        error: 'Erro ao registrar usuário'
+        error: 'Erro ao registrar usuário',
+        detail: (process.env.NODE_ENV === 'development') ? (error.message || String(error)) : undefined
       });
     }
   }

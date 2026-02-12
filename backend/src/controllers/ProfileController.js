@@ -86,9 +86,20 @@ class ProfileController {
         return res.status(404).json({ error: 'Usuário não encontrado' });
       }
 
+      // Serialize apenas campos públicos
+      const publicProfile = {
+        id: profile.id,
+        name: profile.name || '',
+        phone: profile.phone || '',
+        bio: profile.bio || '',
+        avatar_url: profile.avatar_url || null,
+        role: profile.role || 'client',
+        social_links: profile.social_links || {}
+      };
+
       res.json({
         success: true,
-        data: profile
+        data: publicProfile
       });
     } catch (error) {
       logger.error('Erro ao buscar perfil:', error);

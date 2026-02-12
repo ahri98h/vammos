@@ -8,13 +8,18 @@ const path = require('path');
 const db = require('../db');
 const logger = require('../utils/logger');
 
-const UPLOAD_DIR = path.join(__dirname, '../../uploads/avatars');
+const UPLOAD_DIR = path.join(__dirname, '../../backend_data/uploads/avatars');
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 // Criar diretório de uploads se não existir
 if (!fs.existsSync(UPLOAD_DIR)) {
-  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  try {
+    fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+  } catch (e) {
+    // se falhar, logar e continuar (em alguns ambientes as permissões podem ser restritas)
+    logger.warn('Não foi possível criar UPLOAD_DIR:', UPLOAD_DIR, e.message || e);
+  }
 }
 
 class AvatarService {
@@ -169,8 +174,13 @@ class AvatarService {
    * Obter perfil do usuário (público)
    */
   static async getPublicProfile(userId) {
-    return new Promise((resolve, reject) => {
-      db.get().get(
+    try {
+      if (!userId) {
+        logger.warn('getPublicProfile called with empty userId');
+        return {};
+      }
+      
+      const row = await db.get(
         `SELECT 
           id, 
           name, 
@@ -180,24 +190,28 @@ class AvatarService {
           role,
           social_links
         FROM users WHERE id = ?`,
-        [userId],
-        (err, row) => {
-          if (err) {
-            logger.error('Erro ao buscar perfil:', err);
-            reject(err);
-          } else {
-            if (row && row.social_links) {
-              try {
-                row.social_links = JSON.parse(row.social_links);
-              } catch (e) {
-                row.social_links = {};
-              }
-            }
-            resolve(row || {});
-          }
-        }
+        userId
       );
-    });
+      
+      if (!row) {
+        logger.warn(`User ${userId} not found`);
+        return {};
+      }
+      
+      if (row.social_links) {
+        try {
+          row.social_links = JSON.parse(row.social_links);
+        } catch (e) {
+          logger.warn('Failed to parse social_links:', e.message);
+          row.social_links = {};
+        }
+      }
+      
+      return row;
+    } catch (err) {
+      logger.error('Error in getPublicProfile:', err);
+      return {};
+    }
   }
 }
 

@@ -58,6 +58,12 @@ class EmailQueueService {
     this.setupEventListeners();
     this._queueFailureCount = 0;
     this.__PLACEHOLDER = null;
+    // Em ambientes de desenvolvimento sem Redis, desabilitar checagem periódica
+    if (process.env.SKIP_QUEUE_HEALTH === 'true') {
+      logger.info('SKIP_QUEUE_HEALTH=true — pulando monitoramento periódico da fila');
+    } else {
+      this.monitorQueueHealth();
+    }
   }
 
   /**
