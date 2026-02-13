@@ -1,9 +1,2 @@
-# Forçar HTTPS e definir index
-RewriteEngine On
-RewriteCond %{HTTPS} !=on
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
 DirectoryIndex index.html index.php
-
-# Evitar listagem de diretório
 Options -Indexes
