@@ -46,6 +46,11 @@ class DatabasePool {
     });
 
     pool.on('error', (err, client) => {
+      // In development, PostgreSQL may not be running (it's optional)
+      if (process.env.NODE_ENV !== 'production') {
+        // Silent fail - PostgreSQL is optional in development
+        return;
+      }
       logger.error('❌ Unexpected error on idle client', err);
       process.exit(-1);
     });

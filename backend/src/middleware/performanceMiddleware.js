@@ -67,7 +67,14 @@ const responseTime = (req, res, next) => {
   const start = Date.now();
   res.on('finish', () => {
     const duration = Date.now() - start;
-    res.setHeader('X-Response-Time', `${duration}ms`);
+    // Only set header if not already sent
+    if (!res.headersSent) {
+      try {
+        res.setHeader('X-Response-Time', `${duration}ms`);
+      } catch (err) {
+        // Headers already sent, silently ignore
+      }
+    }
     
     // Log slow responses
     if (duration > 1000) {

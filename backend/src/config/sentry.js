@@ -11,7 +11,10 @@ function initializeSentry(app) {
   const environment = process.env.NODE_ENV || 'development';
 
   if (!sentryDsn) {
-    logger.warn('⚠️  Sentry DSN não configurado. Error tracking desabilitado.');
+    if (environment === 'production') {
+      logger.error('❌ Sentry DSN não pode estar vazio em produção');
+    }
+    // Silencioso em development
     return;
   }
 

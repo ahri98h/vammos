@@ -41,13 +41,33 @@ class CacheStrategy {
       
       this.client = redis.createClient(redisConfig);
 
-      this.client.on('error', (err) => logger.error('Redis error', err));
-      this.client.on('connect', () => logger.info('✅ Redis connected'));
+      const isDev = process.env.NODE_ENV !== 'production';
+      
+      this.client.on('error', (err) => {
+        // In development, silently ignore Redis connection errors (Redis is optional)
+        if (isDev) {
+          return; // Silent fail in development
+        }
+        logger.error('Redis error', err.message || err);
+      });
+      
+      this.client.on('connect', () => {
+        if (process.env.NODE_ENV !== 'production') {
+          // Silent in dev
+          return;
+        }
+        logger.info('✅ Redis connected');
+      });
 
       await this.client.connect();
       return true;
     } catch (err) {
-      logger.warn('Redis not available - caching disabled', err.message);
+      if (process.env.NODE_ENV !== 'production') {
+        // Silencioso em development se Redis não estiver disponível
+        return false;
+      }
+      logger.error('❌ Redis não disponível (requerido em prod)', err.message);
+      throw err;
       return false;
     }
   }

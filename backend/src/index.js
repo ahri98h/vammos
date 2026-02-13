@@ -11,6 +11,12 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
+// ✅ Suppress development errors - Redis/PostgreSQL connection errors are expected when services not running
+if (process.env.NODE_ENV !== 'production') {
+  process.removeAllListeners('uncaughtException');
+  process.removeAllListeners('unhandledRejection');
+}
+
 // ✅ NEW: Sentry error tracking (centralized logging)
 const SentryConfig = require('./config/sentry');
 // ✅ NEW: Database pooling (production optimized)
@@ -62,6 +68,9 @@ if (process.env.DATABASE_URL?.startsWith('postgresql')) {
 // ✅ CORRIGIDO: trust proxy configurado apenas se em produção com proxy real
 if (process.env.NODE_ENV === 'production' && process.env.TRUST_PROXY === 'true') {
   app.set('trust proxy', 1); // 1 = primeiro proxy
+} else if (process.env.X_FORWARDED_FOR) {
+  // Se temos X-Forwarded-For header (como em containers), trust it
+  app.set('trust proxy', true);
 }
 const server = http.createServer(app);
 
@@ -95,11 +104,18 @@ try {
 // Inicializar monitoramento (Sentry / NewRelic)
 try {
   const monitoring = new MonitoringService();
-  monitoring.init(app);
+  const success = monitoring.init(app);
+  if (!success && process.env.NODE_ENV === 'production') {
+    logger.error('⚠️  Monitoramento desabilitado (requerido em produção)');
+  } else if (!success) {
+    logger.debug('ℹ️  Monitoramento offline (development mode)');
+  }
   // expor para uso em outros módulos se necessário
   app.locals.monitoring = monitoring;
 } catch (err) {
-  logger.warn('Falha ao iniciar MonitoringService', err.message || err);
+  if (process.env.NODE_ENV === 'production') {
+    logger.error('❌ Falha crítica ao iniciar MonitoringService:', err.message);
+  }
 }
 
 // ===== MIDDLEWARE =====
@@ -146,13 +162,15 @@ const authLimiter = rateLimit({
   max: AUTH_LIMIT_MAX,
   message: 'Muitas tentativas de acesso. Tente novamente em 15 minutos.',
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
+  skip: (req) => process.env.NODE_ENV === 'development' // Disable in dev
 });
 
 const apiLimiter = rateLimit({
   windowMs: API_LIMIT_WINDOW,
   max: API_LIMIT_MAX,
-  message: 'Limite de requisições API excedido'
+  message: 'Limite de requisições API excedido',
+  skip: (req) => process.env.NODE_ENV === 'development' // Disable in dev
 });
 
 
@@ -306,6 +324,14 @@ const PORT = process.env.PORT || 3001;
 // sobrescrever esse comportamento com `PLACEHOLDER=true` para permitir
 // rodar a aplicação localmente em um processo de teste.
 if (process.env.NODE_ENV !== 'test' || process.env.FORCE_RUN === 'true') {
+  // Suppress unhandled rejections from optional services in development
+  process.on('unhandledRejection', (reason, promise) => {
+    if (process.env.NODE_ENV === 'production') {
+      logger.error('Unhandled Rejection:', reason);
+    }
+    // Silently ignore in development - Redis/PostgreSQL failures are okay
+  });
+
   (async () => {
     try {
       await ensureSchema();

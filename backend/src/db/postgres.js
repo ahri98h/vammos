@@ -33,13 +33,19 @@ function initializePool() {
     });
 
     pool.on('error', (err) => {
-      logger.error('Unexpected error on idle client', err);
+      // In development, PostgreSQL may not be running - silently ignore
+      if (process.env.NODE_ENV === 'production') {
+        logger.error('Unexpected error on idle client', err);
+      }
     });
 
     logger.info('PostgreSQL pool initialized successfully');
     return pool;
   } catch (err) {
-    logger.error('Failed to initialize PostgreSQL pool:', err);
+    // PostgreSQL is optional in development
+    if (process.env.NODE_ENV === 'production') {
+      logger.error('Failed to initialize PostgreSQL pool:', err);
+    }
     return null;
   }
 }

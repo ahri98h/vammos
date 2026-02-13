@@ -35,12 +35,14 @@ class RedisService {
         socket: {
           reconnectStrategy: (retries) => {
             if (retries > 10) {
-              logger.error('Redis: Máximo de tentativas atingido');
+              if (process.env.NODE_ENV === 'production') {
+                logger.warn('Redis: Máximo de tentativas atingido. Modo offline.');
+              }
               return new Error('Redis reconnect limit reached');
             }
             return retries * 100;
           },
-          connectTimeout: 10000,
+          connectTimeout: 5000,
         },
       };
       
@@ -51,19 +53,28 @@ class RedisService {
       
       this.client = redis.createClient(config);
 
-      // Event listeners
+      // Event listeners - suppress spam during dev
+      const isDev = process.env.NODE_ENV !== 'production';
+      
       this.client.on('connect', () => {
-        logger.info('🔴 Redis conectado com sucesso');
+        logger.info('✅ Redis conectado com sucesso');
         this.isConnected = true;
       });
 
       this.client.on('error', (err) => {
-        logger.error('Redis error:', err);
+        // In development, silently ignore connection errors since Redis is optional
+        if (isDev) {
+          this.isConnected = false;
+          return;
+        }
+        logger.error('Redis error:', err.message || err);
         this.isConnected = false;
       });
 
       this.client.on('reconnecting', () => {
-        logger.warn('Redis reconectando...');
+        if (!isDev) {
+          logger.warn('Redis reconectando...');
+        }
       });
 
       await this.client.connect();
@@ -73,8 +84,14 @@ class RedisService {
       logger.info('✅ Redis ping successful');
       
     } catch (error) {
-      logger.error('❌ Erro ao conectar Redis:', error);
-      throw error;
+      // In development, Redis is optional
+      if (process.env.NODE_ENV === 'production') {
+        logger.error('❌ Erro ao conectar Redis:', error.message);
+        throw error;
+      } else {
+        // Silent fail in development - Redis connection errors are expected when Redis is not running
+        this.isConnected = false;
+      }
     }
   }
 
