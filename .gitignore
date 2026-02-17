@@ -29,9 +29,17 @@ node_modules/
 /out
 /dist
 
-# Exclude frontend build cache (avoid large binaries in repo)
+# Exclude frontend build cache and committed build outputs (avoid large binaries in repo)
 frontend/.next/
 frontend/.next/**
+frontend/out/
+frontend/public_html/
+frontend/public_html/_next/
+frontend/playwright-report/
+
+# Backend coverage (do not commit coverage reports)
+/coverage
+backend/coverage/
 
 # Environment
 .env
