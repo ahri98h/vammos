@@ -106,7 +106,7 @@ router.get('/conversations', authenticateToken, (req, res) => {
 
       // Enriquecer com nome do usuário
       let processed = 0;
-      rows.forEach((row, idx) => {
+      rows.forEach((row, _idx) => {
         db.get(
           `SELECT id, name FROM users WHERE id = ?`,
           [row.other_user_id],

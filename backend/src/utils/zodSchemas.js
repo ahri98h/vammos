@@ -13,7 +13,7 @@ const { z } = require('zod');
 // HELPER: Middleware para validação
 // ============================================
 const validateSchema = (schema) => {
-  return (req, res, next) => {
+  return (req, res, _next) => {
     try {
       const validated = schema.parse(req.body);
       req.validated = validated;

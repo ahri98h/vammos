@@ -26,7 +26,7 @@ class StaffAvailabilityController_Auto_88 {
       const db = await getDb();
 
       // Query otimizado para buscar staff com scores
-      const availableStaff = await new Promise((resolve, reject) => {
+      const availableStaff = await new Promise((resolve, _reject) => {
         db.all(`
           SELECT 
             s.id,
@@ -148,7 +148,7 @@ class StaffAvailabilityController_Auto_88 {
       const { staffId } = req.params;
       const db = await getDb();
 
-      const status = await new Promise((resolve, reject) => {
+      const status = await new Promise((resolve, _reject) => {
         db.get(`
           SELECT 
             s.id,
@@ -219,7 +219,7 @@ class StaffAvailabilityController_Auto_88 {
       const { staffId } = req.params;
       const db = await getDb();
 
-      const calendar = await new Promise((resolve, reject) => {
+      const calendar = await new Promise((resolve, _reject) => {
         db.all(`
           WITH days_of_week AS (
             SELECT DATE(datetime('now', '+' || (rowid - 1) || ' days')) as date
@@ -311,7 +311,7 @@ class StaffAvailabilityController_Auto_88 {
       const db = await getDb();
 
       // Simular algoritmo de alocação
-      const assignments = await new Promise((resolve, reject) => {
+      const assignments = await new Promise((resolve, _reject) => {
         db.all(`
           SELECT 
             s.id,

@@ -46,7 +46,7 @@ class RateLimitService {
       message = 'Muitas requisições. Tente novamente mais tarde.'
     } = options;
 
-    return (req, res, next) => {
+    return (req, res, _next) => {
       try {
         const key = keyGenerator(req);
         const now = Date.now();

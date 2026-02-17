@@ -83,7 +83,7 @@ class AdminDashboardService_Auto_162 {
     try {
       // Se tabela de serviços existe, usar dados reais
       if (await this.tableExists('services')) {
-        const result = await new Promise((resolve, reject) => {
+        const result = await new Promise((resolve, _reject) => {
           this.db.all(
             `SELECT 
                s.name as name,
@@ -130,7 +130,7 @@ class AdminDashboardService_Auto_162 {
    */
   async getRecentBookings(limit = 10) {
     try {
-      const result = await new Promise((resolve, reject) => {
+      const result = await new Promise((resolve, _reject) => {
         this.db.all(
           `SELECT 
              b.id,
@@ -177,7 +177,7 @@ class AdminDashboardService_Auto_162 {
     try {
       const dateRange = this.getDateRange(period);
 
-      const result = await new Promise((resolve, reject) => {
+      const result = await new Promise((resolve, _reject) => {
         this.db.all(
           `SELECT 
              strftime('%Y-%m', b.scheduled_date) as month,
@@ -236,7 +236,7 @@ class AdminDashboardService_Auto_162 {
   }
 
   async getTotalRevenue(dateRange) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       this.db.get(
         `SELECT SUM(CAST(total_price AS FLOAT)) as total 
          FROM bookings 
@@ -253,7 +253,7 @@ class AdminDashboardService_Auto_162 {
   }
 
   async getBookingStats(dateRange) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       this.db.get(
         `SELECT 
           COUNT(*) as total,
@@ -278,7 +278,7 @@ class AdminDashboardService_Auto_162 {
   }
 
   async getAverageRating() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       // Tenta buscar de tabela reviews se existir
       this.db.get(
         `SELECT AVG(CAST(rating AS FLOAT)) as avg_rating FROM reviews`,
@@ -295,7 +295,7 @@ class AdminDashboardService_Auto_162 {
   }
 
   async getConversionRate(dateRange) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       this.db.get(
         `SELECT COUNT(*) as total_bookings FROM bookings 
          WHERE scheduled_date >= ? AND scheduled_date <= ?`,
@@ -316,7 +316,7 @@ class AdminDashboardService_Auto_162 {
   }
 
   async getSalesDataByDay(dateRange) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       this.db.all(
         `SELECT 
           DATE(scheduled_date) as date,
@@ -344,7 +344,7 @@ class AdminDashboardService_Auto_162 {
   }
 
   async getSalesDataByWeek(dateRange) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       this.db.all(
         `SELECT 
           strftime('%W', scheduled_date) as week,
@@ -358,7 +358,7 @@ class AdminDashboardService_Auto_162 {
         (err, rows) => {
           if (err) reject(err);
           else {
-            const data = (rows || []).map((row, idx) => ({
+            const data = (rows || []).map((row, _idx) => ({
               date: `Semana ${row.week}`,
               sales: parseFloat(row.sales || 0),
               revenue: parseFloat(row.sales || 0)
@@ -371,7 +371,7 @@ class AdminDashboardService_Auto_162 {
   }
 
   async getSalesDataByMonth(dateRange) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       this.db.all(
         `SELECT 
           strftime('%Y-%m', scheduled_date) as month,

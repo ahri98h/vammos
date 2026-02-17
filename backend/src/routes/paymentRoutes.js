@@ -175,7 +175,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
         logger?.info('Payment confirmed', { bookingId, userId });
         // ✅ IMPLEMENTADO: Atualizar status do agendamento no banco como "confirmado"
         try {
-          await new Promise((resolve, reject) => {
+          await new Promise((resolve, _reject) => {
             const db = new sqlite3.Database(DB_PATH);
             db.run(
               'UPDATE bookings SET status = ?, paid = 1, updated_at = CURRENT_TIMESTAMP WHERE id = ?',

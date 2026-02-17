@@ -10,7 +10,7 @@ const RecurringBookingService = require('../services/RecurringBookingService');
 // POST /api/bookings/recurring
 router.post('/recurring', (req, res) => {
   try {
-    const { userId, serviceId, frequency, dayOfWeek, time, startDate, notes } = req.body;
+    const { userId, serviceId, frequency, dayOfWeek, time, _startDate, notes } = req.body;
     const booking = RecurringBookingService.createRecurring({
       userId,
       serviceId,

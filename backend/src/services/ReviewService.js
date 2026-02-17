@@ -12,7 +12,7 @@ class ReviewService {
    * Criar nova avaliação
    */
   static createReview(bookingId, userId, rating, comment, photos = []) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       if (rating < 1 || rating > 5) {
@@ -51,7 +51,7 @@ class ReviewService {
    * Obter avaliações de um serviço/profissional
    */
   static getReviews(filter = {}, limit = 10, offset = 0) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       let query = `SELECT r.*, u.name, u.avatar FROM reviews r
@@ -98,7 +98,7 @@ class ReviewService {
    * Calcular rating médio
    */
   static getAverageRating(professionalId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.get(
@@ -122,7 +122,7 @@ class ReviewService {
    * Obter distribuição de ratings
    */
   static getAggregateReviews(professionalId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(
@@ -149,7 +149,7 @@ class ReviewService {
    * Moderar/Aprovar review
    */
   static approveReview(reviewId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.run(

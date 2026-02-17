@@ -24,7 +24,7 @@ function ensureDir() {
 function promisifyDb(db) {
   return {
     run(sql, ...params) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         db.run(sql, params, function (err) {
           if (err) return reject(err);
           resolve({ lastID: this.lastID, changes: this.changes });
@@ -32,7 +32,7 @@ function promisifyDb(db) {
       });
     },
     get(sql, ...params) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         db.get(sql, params, (err, row) => {
           if (err) return reject(err);
           resolve(row);
@@ -40,7 +40,7 @@ function promisifyDb(db) {
       });
     },
     all(sql, ...params) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         db.all(sql, params, (err, rows) => {
           if (err) return reject(err);
           resolve(rows);
@@ -48,7 +48,7 @@ function promisifyDb(db) {
       });
     },
     exec(sql) {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         db.exec(sql, (err) => {
           if (err) return reject(err);
           resolve();
@@ -56,7 +56,7 @@ function promisifyDb(db) {
       });
     },
     close() {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         db.close((err) => err ? reject(err) : resolve());
       });
     }

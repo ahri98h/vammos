@@ -306,7 +306,7 @@ app.use(globalErrorHandler);
 if (app.locals.monitoring && typeof app.locals.monitoring.setupErrorHandler === 'function') {
   app.locals.monitoring.setupErrorHandler(app);
 } else {
-  app.use((err, req, res, next) => {
+  app.use((err, req, res, _next) => {
     logger.error('Erro no middleware:', err);
     res.status(500).json({ error: 'Erro interno do servidor' });
   });

@@ -13,7 +13,7 @@ class HourlyBookingService_Auto_192 {
    * Criar agendamento por horas
    */
   static createHourlyBooking(userId, professionalId, date, startTime, durationHours, hourlyRate) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       const amount = durationHours * hourlyRate;
@@ -38,7 +38,7 @@ class HourlyBookingService_Auto_192 {
    * Obter tarifas por hora por profissional
    */
   static HourlyBookingService_Auto_192(professionalId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.get(
@@ -71,7 +71,7 @@ class HourlyBookingService_Auto_192 {
    * Verificar disponibilidade (por minuto)
    */
   static checkAvailability(professionalId, date, startTime, endTime) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.get(

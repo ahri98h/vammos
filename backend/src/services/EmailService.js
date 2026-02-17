@@ -549,7 +549,7 @@ class EmailService {
     }
   }
 
-  async sendGenericEmail(to, subject, htmlContent) {
+  async sendGenericEmail(_to, subject, htmlContent) {
     try {
       const mailOptions = {
         from: process.env.EMAIL_USER || 'noreply@leidycleaner.com',
@@ -1180,7 +1180,7 @@ class EmailService {
     }
   }
 
-  async enqueueGenericEmail(to, subject, htmlContent, options = {}) {
+  async enqueueGenericEmail(_to, subject, htmlContent, options = {}) {
     try {
       const job = await this.queue.add(
         'generic-email',
@@ -1213,7 +1213,7 @@ class EmailService {
     const { to, clientName, bookingData } = job.data;
 
     try {
-      await this.sendBookingConfirmation(to, clientName, bookingData);
+      await this.sendBookingConfirmation(_to, clientName, bookingData);
       return {
         success: true,
         processedAt: new Date().toISOString(),
@@ -1233,7 +1233,7 @@ class EmailService {
     const { to, clientName, bookingData } = job.data;
 
     try {
-      await this.sendBookingReminder(to, clientName, bookingData);
+      await this.sendBookingReminder(_to, clientName, bookingData);
       return {
         success: true,
         processedAt: new Date().toISOString(),
@@ -1252,7 +1252,7 @@ class EmailService {
     const { to, clientName, paymentData } = job.data;
 
     try {
-      await this.sendPaymentConfirmation(to, clientName, paymentData);
+      await this.sendPaymentConfirmation(_to, clientName, paymentData);
       return {
         success: true,
         processedAt: new Date().toISOString(),
@@ -1270,7 +1270,7 @@ class EmailService {
     const { to, clientName, refundData } = job.data;
 
     try {
-      await this.sendRefundNotification(to, clientName, refundData);
+      await this.sendRefundNotification(_to, clientName, refundData);
       return {
         success: true,
         processedAt: new Date().toISOString(),
@@ -1288,7 +1288,7 @@ class EmailService {
     const { to, clientName, reviewData } = job.data;
 
     try {
-      await this.sendReviewRequest(to, clientName, reviewData);
+      await this.sendReviewRequest(_to, clientName, reviewData);
       return {
         success: true,
         processedAt: new Date().toISOString(),
@@ -1306,7 +1306,7 @@ class EmailService {
     const { to, subject, htmlContent } = job.data;
 
     try {
-      const result = await this.sendGenericEmail(to, subject, htmlContent);
+      const result = await this.sendGenericEmail(_to, subject, htmlContent);
       return {
         success: true,
         processedAt: new Date().toISOString(),

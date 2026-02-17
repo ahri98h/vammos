@@ -12,7 +12,7 @@ router.post('/generate', authenticateToken, async (req, res) => {
     const db = require('../database');
 
     // Obter dados do agendamento
-    const booking = await new Promise((resolve, reject) => {
+    const booking = await new Promise((resolve, _reject) => {
       db.get('SELECT * FROM bookings WHERE id = ?', [bookingId], (err, row) => {
         if (err) reject(err);
         else resolve(row);
@@ -24,7 +24,7 @@ router.post('/generate', authenticateToken, async (req, res) => {
     }
 
     // Obter dados do usuário
-    const user = await new Promise((resolve, reject) => {
+    const user = await new Promise((resolve, _reject) => {
       db.get('SELECT * FROM users WHERE id = ?', [userId], (err, row) => {
         if (err) reject(err);
         else resolve(row);

@@ -171,4 +171,4 @@ class AdminDashboardController {
   }
 }
 
-module.exports = PLACEHOLDER;
+module.exports = AdminDashboardController;

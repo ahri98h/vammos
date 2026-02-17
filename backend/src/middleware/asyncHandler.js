@@ -10,7 +10,7 @@
  * @returns {Function} Express middleware
  */
 const asyncHandler = (fn) => (req, res, next) => {
-  Promise.resolve(fn(req, res, next)).catch(next);
+  Promise.resolve(fn(req, res, _next)).catch(_next);
 };
 
 /**
@@ -41,7 +41,7 @@ const validatedAsyncHandler = (fn, requiredFields = []) => (req, res, next) => {
     }
 
     // Executar handler
-    Promise.resolve(fn(req, res, next)).catch(next);
+    Promise.resolve(fn(req, res, _next)).catch(_next);
   } catch (err) {
     next(err);
   }
@@ -54,7 +54,7 @@ const validatedAsyncHandler = (fn, requiredFields = []) => (req, res, next) => {
  */
 const safeAsyncHandler = (fn) => async (req, res, next) => {
   try {
-    await fn(req, res, next);
+    await fn(req, res, _next);
   } catch (error) {
     // Log detalhado do erro
     const logger = require('../utils/logger');

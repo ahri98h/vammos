@@ -66,9 +66,9 @@ describe.skip('Database Factory', () => {
       process.env.DATABASE_URL = 'postgresql://localhost/test';
 
       const postgresModule = require('../db/postgres');
-// [CLEANED_PLACEHOLDER]       postgresModule.initializePool; // (() => {
+      jest.spyOn(postgresModule, 'initializePool').mockImplementationOnce(async () => {
         throw new Error('Connection failed');
-// [CLEANED_PLACEHOLDER]       });
+      });
 
       const result = await initializeDB();
       // Should successfully fallback to SQLite
@@ -251,12 +251,12 @@ describe.skip('Database Factory', () => {
       process.env.DATABASE_URL = 'postgresql://localhost/test';
 
       const postgresModule = require('../db/postgres');
-// [CLEANED_PLACEHOLDER]       postgresModule.initializePool; // (() => {
+      jest.spyOn(postgresModule, 'initializePool').mockImplementationOnce(async () => {
         throw new Error('Connection error');
-// [CLEANED_PLACEHOLDER]       });
+      });
 
       const result = await initializeDB();
       expect(result).toBeDefined();
-// [CLEANED_PLACEHOLDER]     });
+    });
   });
 });

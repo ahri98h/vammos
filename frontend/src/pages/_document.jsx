@@ -38,15 +38,12 @@ export default class MyDocument extends Document {
           <meta charSet="utf-8" />
           <meta name="description" content="Leidy Cleaner - Serviços de limpeza profissional em Porto Alegre. Agende online e receba atendimento rápido e confiável." />
           <meta name="theme-color" content="#0f172a" />
-          {/* Favicon e ícones da marca */}
-          {/* Prefer SVG when available for sharp scaling */}
-          <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+          {/* Favicon e ícones da marca - usar o SVG principal como único ícone de marca */}
+          <link rel="icon" href="/images/logo-leidy.svg" type="image/svg+xml" />
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo-leidy.svg" />
           <link rel="manifest" href="/site.webmanifest" />
-          {/* Legacy ICO fallback */}
-          <link rel="shortcut icon" href="/favicon.ico" />
+          {/* Legacy fallback apontando para o SVG principal */}
+          <link rel="shortcut icon" href="/images/logo-leidy.svg" />
           <meta name="theme-color" content="#10b981" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

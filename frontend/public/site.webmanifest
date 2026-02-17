@@ -7,9 +7,9 @@
   "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "/icon-brand.jpg",
+      "src": "/images/logo-leidy.svg",
       "sizes": "192x192",
-      "type": "image/jpeg"
+      "type": "image/svg+xml"
     }
   ]
 }

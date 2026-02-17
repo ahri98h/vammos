@@ -5,7 +5,7 @@
 
 const logger = require('../utils/logger');
 
-class AutoSchedulingService_Auto_168 {
+class AutoSchedulingService {
   constructor() {
     this.schedules = new Map();
     this.professionals = new Map();
@@ -15,7 +15,7 @@ class AutoSchedulingService_Auto_168 {
   /**
    * Agendar profissionais automaticamente
    */
-  async AutoSchedulingService_Auto_168(bookingRequest) {
+  async scheduleBooking(bookingRequest) {
     try {
       const {
         serviceType,
@@ -23,24 +23,24 @@ class AutoSchedulingService_Auto_168 {
         date,
         duration,
         clientId,
-        AutoSchedulingService_Auto_168 = null
+        preferredProfessionalId = null
       } = bookingRequest;
 
       // Buscar profissionais disponíveis
-      const AutoSchedulingService_Auto_168 = this.AutoSchedulingService_Auto_168(
+      const availableProfessionals = this.findAvailableProfessionals(
         serviceType,
         date,
         duration,
         location,
-        AutoSchedulingService_Auto_168
+        preferredProfessionalId
       );
 
-      if (AutoSchedulingService_Auto_168.length === 0) {
+      if (availableProfessionals.length === 0) {
         throw new Error('Nenhum profissional disponível');
       }
 
       // Selecionar melhor profissional (rating + distância)
-      const selected = AutoSchedulingService_Auto_168[0];
+      const selected = availableProfessionals[0];
 
       const scheduleId = `sched_${Date.now()}`;
       const schedule = {
@@ -78,7 +78,7 @@ class AutoSchedulingService_Auto_168 {
   /**
    * Encontrar profissionais disponíveis
    */
-  AutoSchedulingService_Auto_168(serviceType, date, duration, location, preferredId) {
+  findAvailableProfessionals(serviceType, date, duration, location, preferredId) {
     // Dados mockados
     const professionals = [
       { id: 'prof_1', name: 'João Silva', rating: 4.9, distance: 2.5, travelTime: 15 },
@@ -120,7 +120,7 @@ class AutoSchedulingService_Auto_168 {
         professionalId,
         bookings: bookingIds,
         optimizedAt: new Date(),
-        legs: this.AutoSchedulingService_Auto_168(bookingIds),
+        legs: this.calculateOptimalRoute(bookingIds),
         estimatedDuration: 240, // minutos
         totalDistance: 28.5 // km
       };
@@ -145,7 +145,7 @@ class AutoSchedulingService_Auto_168 {
   /**
    * Calcular rota ótima
    */
-  AutoSchedulingService_Auto_168(bookingIds) {
+  calculateOptimalRoute(bookingIds) {
     return bookingIds.map((id, index) => ({
       booking: id,
       order: index + 1,
@@ -158,7 +158,7 @@ class AutoSchedulingService_Auto_168 {
   /**
    * Sincronizar com calendário do profissional
    */
-  async AutoSchedulingService_Auto_168(professionalId, schedule) {
+  async syncCalendar(professionalId, schedule) {
     logger.log({
       level: 'info',
       message: 'Calendar synced',
@@ -177,7 +177,7 @@ class AutoSchedulingService_Auto_168 {
   /**
    * Obter sugestões de agendamento inteligente
    */
-  async AutoSchedulingService_Auto_168(clientId) {
+  async getSuggestedSchedules(clientId) {
     return {
       clientId,
       suggestions: [
@@ -200,7 +200,7 @@ class AutoSchedulingService_Auto_168 {
   /**
    * Detecção de conflitos de agendamento
    */
-  async AutoSchedulingService_Auto_168() {
+  async detectConflicts() {
     const conflicts = [];
 
     this.schedules.forEach((schedule, scheduleId) => {
@@ -214,7 +214,7 @@ class AutoSchedulingService_Auto_168 {
       if (conflicting.length > 0) {
         conflicts.push({
           schedule: scheduleId,
-          AutoSchedulingService_Auto_168: conflicting.map(c => c.id),
+          conflictingSchedules: conflicting.map(c => c.id),
           severity: 'high'
         });
       }
@@ -229,14 +229,14 @@ class AutoSchedulingService_Auto_168 {
   /**
    ✅ NOVO: Gerar relatório de ocupação
    */
-  async getOccupancyReport(professionalId, startDate, endDate) {
-    const period = new Date(endDate) - new Date(startDate);
+  async getOccupancyReport(professionalId, _startDate, _endDate) {
+    const period = new Date(_endDate) - new Date(_startDate);
     const days = Math.floor(period / (1000 * 60 * 60 * 24));
 
     const schedules = Array.from(this.schedules.values())
       .filter(s => s.professionalId === professionalId &&
-        s.date >= new Date(startDate) &&
-        s.date <= new Date(endDate));
+        s.date >= new Date(_startDate) &&
+        s.date <= new Date(_endDate));
 
     const totalMinutes = days * 480; // 8 horas por dia
     const occupiedMinutes = schedules.reduce((sum, s) => sum + s.duration, 0);
@@ -245,7 +245,7 @@ class AutoSchedulingService_Auto_168 {
     return {
       professionalId,
       period: `${days} dias`,
-      AutoSchedulingService_Auto_168: totalMinutes,
+      totalAvailableMinutes: totalMinutes,
       occupiedMinutes,
       occupancyRate: `${occupancyRate}%`,
       schedules: schedules.length,
@@ -254,4 +254,4 @@ class AutoSchedulingService_Auto_168 {
   }
 }
 
-module.exports = new AutoSchedulingService_Auto_168();
+module.exports = new AutoSchedulingService();

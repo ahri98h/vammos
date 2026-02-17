@@ -68,7 +68,6 @@ class CacheStrategy {
       }
       logger.error('❌ Redis não disponível (requerido em prod)', err.message);
       throw err;
-      return false;
     }
   }
 
@@ -94,7 +93,7 @@ class CacheStrategy {
    * Cache payment data (NO cache)
    * Payment data MUST always be fresh from DB
    */
-  async cachePayment(paymentId, data) {
+  async cachePayment(_paymentId, _data) {
     // Intentionally DON'T cache payment data
     // Always fetch from DB for consistency
     return null;

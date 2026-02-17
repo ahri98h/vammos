@@ -77,7 +77,7 @@ class MonitoringService {
     }
 
     // Middleware de erro customizado
-    app.use((err, req, res, next) => {
+    app.use((err, req, res, _next) => {
       this.captureError(err, req);
 
       const statusCode = err.statusCode || 500;

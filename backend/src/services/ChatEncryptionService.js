@@ -130,7 +130,7 @@ class ChatEncryptionService_Auto_180 {
    ✅ NOVO: Gerar keypair RSA para troca assimétrica
    */
   static generateRSAKeypair(modulusLength = 2048) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       crypto.generateKeyPair('rsa', {
         modulusLength,
         publicKeyEncoding: {

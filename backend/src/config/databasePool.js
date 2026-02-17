@@ -11,7 +11,6 @@ class DatabasePool {
    * Initialize PostgreSQL connection pool with production-optimized settings
    */
   static createPool() {
-    const isDev = process.env.NODE_ENV === 'development';
     const isTest = process.env.NODE_ENV === 'test';
 
     const poolConfig = {
@@ -45,7 +44,7 @@ class DatabasePool {
       logger.debug('✅ Database connection established');
     });
 
-    pool.on('error', (err, client) => {
+    pool.on('error', (err, _client) => {
       // In development, PostgreSQL may not be running (it's optional)
       if (process.env.NODE_ENV !== 'production') {
         // Silent fail - PostgreSQL is optional in development

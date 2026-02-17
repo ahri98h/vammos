@@ -1,5 +1,3 @@
-import js from '@eslint/js';
-
 export default [
   {
     ignores: [
@@ -16,26 +14,10 @@ export default [
     ]
   },
   {
-    // ESM config files
-    files: ['eslint.config.js'],
-    languageOptions: {
-      ecmaVersion: 2024,
-      sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: false
-        }
-      }
-    },
-    rules: {
-      'no-undef': 'off'
-    }
-  },
-  {
     files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 2024,
-      sourceType: 'commonjs',
+      sourceType: 'module',
       parserOptions: {
         ecmaFeatures: {
           jsx: false

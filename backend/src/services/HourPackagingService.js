@@ -124,7 +124,7 @@ class HourPackagingService_Auto_191 {
 
     const db = getDb();
     try {
-      const credit = await new Promise((resolve, reject) => {
+      const credit = await new Promise((resolve, _reject) => {
         db.get(
           'SELECT * FROM user_hour_credits WHERE user_id = ?',
           [userId],
@@ -159,7 +159,7 @@ class HourPackagingService_Auto_191 {
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + expiryDays);
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.run(
         `
         INSERT INTO user_hour_credits (user_id, total_hours, available_hours, last_purchase_date, expiry_date)
@@ -185,7 +185,7 @@ class HourPackagingService_Auto_191 {
   async consumeHourCredit(userId, hoursUsed) {
     const db = getDb();
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.run(
         `
         UPDATE user_hour_credits

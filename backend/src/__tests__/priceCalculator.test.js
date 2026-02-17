@@ -368,9 +368,9 @@ describe('priceCalculator', () => {
     const baseService = {
       name: 'Limpeza Completa',
       base_price: 40,
-      calculatePrice: 20,
-      calculatePrice: 40,
-      calculatePrice: 1.50
+      quarter_price: 20,
+      extra_quarter_price: 40,
+      staff_hourly_rate: 1.50
     };
 
     test('should generate summary with service title and duration', () => {

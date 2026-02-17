@@ -12,8 +12,8 @@ export default function MobileTopBar() {
         <div className="max-w-4xl mx-auto flex items-center justify-between px-4 py-3">
           <Link href="/">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 relative rounded-lg overflow-hidden">
-                <Image src="https://leidycleaner.com.br/logo-leidy.png" alt="Leidy Cleaner" width={40} height={40} />
+                <div className="w-10 h-10 relative rounded-lg overflow-hidden">
+                <Image src="/images/logo-leidy.svg" alt="Leidy Cleaner" width={40} height={40} />
               </div>
               <div className="leading-tight">
                 <div className="text-sm font-black text-gray-900 dark:text-white">Leidy Cleaner</div>

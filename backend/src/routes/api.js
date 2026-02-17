@@ -214,7 +214,7 @@ router.post('/notifications/test-email', authenticateToken, async (req, res) => 
       html = `<p>Test email</p>`;
     }
 
-    const result = await notif.sendEmail(to, subj, html);
+    const result = await notif.sendEmail(_to, subj, html);
     res.json({ success: true, result });
   } catch (err) {
     console.error('Test email error:', err);

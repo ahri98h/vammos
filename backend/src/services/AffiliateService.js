@@ -20,7 +20,7 @@ class AffiliateService {
    * Registrar usuário como afiliado
    */
   static registerAffiliate(userId, commissionRate = 0.10) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
       const referralCode = this.generateReferralCode(userId);
 
@@ -47,7 +47,7 @@ class AffiliateService {
    * Registrar referral (quando alguém usa código)
    */
   static registerReferral(referralCode, newUserId, transactionAmount) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       // 1. Encontrar afiliado pelo código
@@ -106,7 +106,7 @@ class AffiliateService {
    * Obter dados do afiliado
    */
   static getAffiliateStats(userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.get(
@@ -149,7 +149,7 @@ class AffiliateService {
    * Solicitar saque de ganhos
    */
   static requestWithdrawal(userId, amount) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       // Verificar se tem saldo suficiente
@@ -194,7 +194,7 @@ class AffiliateService {
    * Aprovar saque (admin)
    */
   static approveWithdrawal(withdrawalId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.run(
@@ -234,8 +234,10 @@ class AffiliateService {
         FOREIGN KEY (user_id) REFERENCES users(id)
       )
     `, (err) => {
-      if (err) console.error('Erro ao criar tabela affiliates:', err);
-      else    });
+      if (err) {
+        console.error('Erro ao criar tabela affiliates:', err);
+      }
+    });
 
     // Tabela de referrals
     db.run(`
@@ -252,8 +254,10 @@ class AffiliateService {
         FOREIGN KEY (referred_user_id) REFERENCES users(id)
       )
     `, (err) => {
-      if (err) console.error('Erro ao criar tabela referrals:', err);
-      else    });
+      if (err) {
+        console.error('Erro ao criar tabela referrals:', err);
+      }
+    });
 
     // Tabela de saques
     db.run(`

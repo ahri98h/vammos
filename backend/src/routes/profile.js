@@ -97,7 +97,7 @@ router.put('/company/info', authenticateToken, async (req, res) => {
 });
 
 // Error handler para multer
-router.use((error, req, res, next) => {
+router.use((error, req, res, _next) => {
   if (error instanceof multer.MulterError) {
     logger.error('Multer error:', error);
     return res.status(400).json({ error: 'Erro ao fazer upload: ' + error.message });

@@ -71,7 +71,7 @@ router.get('/my-bookings', authenticateToken, async (req, res) => {
     const userId = req.user.id;
     const db = require('../database');
 
-    const bookings = await new Promise((resolve, reject) => {
+    const bookings = await new Promise((resolve, _reject) => {
       db.all(
         'SELECT * FROM hourly_bookings WHERE user_id = ? ORDER BY date DESC',
         [userId],

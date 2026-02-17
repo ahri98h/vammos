@@ -91,7 +91,7 @@ class StaffOptimizationService {
   async _getAvailableCandidates(db, options) {
     const { serviceId, date, time } = options;
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           s.id,
@@ -320,7 +320,7 @@ class StaffOptimizationService {
   async getCancellationReductionReport(db, options) {
     const { daysBack = 30 } = options;
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           s.id,
@@ -375,7 +375,7 @@ class StaffOptimizationService {
       const services = [];
 
       // Buscar agendamentos pendentes para este dia
-      const bookingsForDay = await new Promise((resolve, reject) => {
+      const bookingsForDay = await new Promise((resolve, _reject) => {
         db.all(`
           SELECT * FROM bookings 
           WHERE DATE(booking_date) = ? 

@@ -7,7 +7,7 @@ const logger = require('../utils/logger');
 const fs = require('fs').promises;
 const path = require('path');
 
-class CDNAssetOptimizerService_Auto_177 {
+class CDNAssetOptimizerService {
   constructor() {
     this.cdnUrl = process.env.CDN_URL || 'https://cdn.example.com';
     this.assetCache = new Map();
@@ -35,7 +35,7 @@ class CDNAssetOptimizerService_Auto_177 {
    ✅ NOVO: Gerar URL otimizada para imagem
    * Suporta width, height, format (webp, jpeg, png), quality
    */
-  CDNAssetOptimizerService_Auto_177(imagePath, options = {}) {
+  generateOptimizedImageUrl(imagePath, options = {}) {
     const {
       width,
       height,
@@ -67,7 +67,7 @@ class CDNAssetOptimizerService_Auto_177 {
   /**
    ✅ NOVO: Gerar srcset para responsive images
    */
-  CDNAssetOptimizerService_Auto_177(imagePath, options = {}) {
+  generateResponsiveImageSrcSet(imagePath, options = {}) {
     const sizes = [320, 640, 1024, 1920];
     const qualityBySize = {
       320: 70,  // Mobile
@@ -78,7 +78,7 @@ class CDNAssetOptimizerService_Auto_177 {
 
     const srcset = sizes
       .map(size => {
-        const url = this.CDNAssetOptimizerService_Auto_177(imagePath, {
+        const url = this.generateOptimizedImageUrl(imagePath, {
           width: size,
           quality: qualityBySize[size],
           format: 'webp'
@@ -90,16 +90,16 @@ class CDNAssetOptimizerService_Auto_177 {
     return {
       srcset,
       sizes: '(max-width: 320px) 100vw, (max-width: 640px) 100vw, (max-width: 1024px) 100vw, 100vw',
-      defaultSrc: this.CDNAssetOptimizerService_Auto_177(imagePath, { quality: 80 })
+      defaultSrc: this.generateOptimizedImageUrl(imagePath, { quality: 80 })
     };
   }
 
   /**
    ✅ NOVO: Gerar placeholder (LQIP - Low Quality Image Placeholder)
    */
-  generateLQIPUrl(imagePath) {
+  generatePlaceholder(imagePath) {
     // Gerar versão ultra-comprimida para placeholder
-    return this.CDNAssetOptimizerService_Auto_177(imagePath, {
+    return this.generateOptimizedImageUrl(imagePath, {
       width: 50,
       height: 50,
       quality: 20,
@@ -110,7 +110,7 @@ class CDNAssetOptimizerService_Auto_177 {
   /**
    ✅ NOVO: Calcular economia de banda
    */
-  CDNAssetOptimizerService_Auto_177() {
+  getCompressionStats() {
     if (this.compressionStats.filesProcessed === 0) {
       return {
         savings: 0,
@@ -136,9 +136,9 @@ class CDNAssetOptimizerService_Auto_177 {
   /**
    ✅ NOVO: Gerar tag HTML com lazy loading
    */
-  CDNAssetOptimizerService_Auto_177(imagePath, alt = '', options = {}) {
-    const responsive = this.CDNAssetOptimizerService_Auto_177(imagePath, options);
-    const lqip = this.generateLQIPUrl(imagePath);
+  generateResponsiveImageTag(imagePath, alt = '', options = {}) {
+    const responsive = this.generateResponsiveImageSrcSet(imagePath, options);
+    const lqip = this.generatePlaceholder(imagePath);
 
     return `
       <picture>
@@ -160,7 +160,7 @@ class CDNAssetOptimizerService_Auto_177 {
   /**
    ✅ NOVO: Gerar manifesto de assets
    */
-  async CDNAssetOptimizerService_Auto_177(publicPath) {
+  async generateAssetManifest(publicPath) {
     try {
       const manifest = {
         version: '1.0.0',
@@ -184,7 +184,7 @@ class CDNAssetOptimizerService_Auto_177 {
               path: `/${file}`,
               size: stat.size,
               mtime: stat.mtime,
-              optimizedUrl: this.CDNAssetOptimizerService_Auto_177(`/${file}`, {
+              optimizedUrl: this.generateOptimizedImageUrl(`/${file}`, {
                 format: 'webp',
                 quality: 80
               })
@@ -208,7 +208,7 @@ class CDNAssetOptimizerService_Auto_177 {
   getCacheHeaders(fileType) {
     const headers = {
       'Cache-Control': 'public, max-age=31536000, immutable',
-      'CDNAssetOptimizerService_Auto_177': 'nosniff'
+      'X-Content-Type-Options': 'nosniff'
     };
 
     if (fileType === 'image') {
@@ -244,7 +244,7 @@ class CDNAssetOptimizerService_Auto_177 {
   /**
    ✅ NOVO: Gerar sitemap de imagens (para SEO)
    */
-  async CDNAssetOptimizerService_Auto_177(assets) {
+  async generateImageSitemap(assets) {
     const urls = assets
       .filter(asset => asset.type === 'image')
       .map(asset => ({
@@ -273,12 +273,12 @@ class CDNAssetOptimizerService_Auto_177 {
   /**
    ✅ NOVO: Medir performance de imagem
    */
-  async CDNAssetOptimizerService_Auto_177(imageUrl) {
+  async getImagePerformanceMetrics(imageUrl) {
     return {
       url: imageUrl,
       metrics: {
-        CDNAssetOptimizerService_Auto_177: 'depends on user connection',
-        CDNAssetOptimizerService_Auto_177: 'depends on image dimensions',
+        largestContentfulPaint: 'depends on user connection',
+        cumulativeLayoutShift: 'depends on image dimensions',
         firstInputDelay: 'not affected if lazy-loaded',
         recommendations: [
           'Use responsive images with srcset',
@@ -321,9 +321,9 @@ class CDNAssetOptimizerService_Auto_177 {
   /**
    ✅ NOVO: Gerar report de otimização
    */
-  CDNAssetOptimizerService_Auto_177() {
+  getOptimizationReport() {
     return {
-      bandwidthSavings: this.CDNAssetOptimizerService_Auto_177(),
+      bandwidthSavings: this.getCompressionStats(),
       cachePolicy: this.generateCachePolicy(),
       recommendations: [
         'Use WebP format with JPEG fallback',
@@ -346,4 +346,4 @@ class CDNAssetOptimizerService_Auto_177 {
   }
 }
 
-module.exports = new CDNAssetOptimizerService_Auto_177();
+module.exports = new CDNAssetOptimizerService();

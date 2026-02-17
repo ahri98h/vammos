@@ -19,7 +19,7 @@ class CDNAssetController {
         return res.status(400).json({ error: 'imagePath é obrigatória' });
       }
 
-      const optimizedUrl = CDNAssetOptimizerService.generateOptimizedUrl(
+      const optimizedUrl = CDNAssetOptimizerService.generateOptimizedImageUrl(
         imagePath,
         { width, height, quality, format }
       );
@@ -29,8 +29,8 @@ class CDNAssetController {
         original: imagePath,
         optimized: optimizedUrl,
         sizes: {
-          responsive: CDNAssetOptimizerService.generateResponsiveSet(imagePath),
-          placeholder: CDNAssetOptimizerService.generateLQIPUrl(imagePath)
+          responsive: CDNAssetOptimizerService.generateResponsiveImageSrcSet(imagePath),
+          placeholder: CDNAssetOptimizerService.generatePlaceholder(imagePath)
         }
       });
     } catch (error) {
@@ -51,7 +51,7 @@ class CDNAssetController {
         return res.status(400).json({ error: 'imagePath é obrigatória' });
       }
 
-      const responsiveSet = CDNAssetOptimizerService.generateResponsiveSet(imagePath);
+      const responsiveSet = CDNAssetOptimizerService.generateResponsiveImageSrcSet(imagePath);
 
       return res.json({
         success: true,
@@ -84,7 +84,7 @@ class CDNAssetController {
         return res.status(400).json({ error: 'imagePath é obrigatória' });
       }
 
-      const placeholder = CDNAssetOptimizerService.generateLQIPUrl(imagePath);
+      const placeholder = CDNAssetOptimizerService.generatePlaceholder(imagePath);
 
       return res.json({
         success: true,
@@ -103,7 +103,7 @@ class CDNAssetController {
    */
   static async getBandwidthSavings(req, res) {
     try {
-      const savings = CDNAssetOptimizerService.calculateBandwidthSavings();
+      const savings = CDNAssetOptimizerService.getCompressionStats();
 
       return res.json({
         success: true,
@@ -210,7 +210,7 @@ class CDNAssetController {
       const { imageId } = req.params;
       const imageUrl = `/images/${imageId}`;
 
-      const performance = await CDNAssetOptimizerService.measureImagePerformance(imageUrl);
+      const performance = await CDNAssetOptimizerService.getImagePerformanceMetrics(imageUrl);
 
       return res.json({
         success: true,
@@ -226,9 +226,9 @@ class CDNAssetController {
    ✅ NOVO: GET /api/cdn/optimization-report
    * Obter relatório completo de otimização
    */
-  static async getImagePerformance(req, res) {
+  static async getOptimizationReport(req, res) {
     try {
-      const report = CDNAssetOptimizerService.generateOptimizationReport();
+      const report = CDNAssetOptimizerService.getOptimizationReport();
 
       return res.json({
         success: true,

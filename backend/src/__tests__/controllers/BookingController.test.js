@@ -97,7 +97,7 @@ describe('BookingController', () => {
  */
 
 jest.mock('../../services/BookingService', () => ({
-  validateBookingData: jest.fn((data) => ({ valid: true })),
+  validateBookingData: jest.fn((_data) => ({ valid: true })),
   checkForConflicts: jest.fn(() => Promise.resolve(false)),
   calculatePrice: jest.fn(() => 150.00)
 }));

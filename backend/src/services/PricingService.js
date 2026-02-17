@@ -191,7 +191,7 @@ class PricingService {
 
     try {
       const db = await getDb();
-      const user = await new Promise((resolve, reject) => {
+      const user = await new Promise((resolve, _reject) => {
         db.get(
           'SELECT SUM(amount) as total_spent, COUNT(*) as booking_count FROM bookings WHERE user_id = ? AND status = ?',
           [userId, 'completed'],
@@ -392,7 +392,7 @@ class PricingService {
     const subtotalComTaxa = basePrice + percentualExtrasTotal;
     const taxValue = subtotalComTaxa * this.EXTRAS_TAX;
 
-    extrasBreakdown.forEach((extra, idx) => {
+    extrasBreakdown.forEach((extra, _idx) => {
       if (extra.isPercentual) {
         const taxOnThisExtra = extra.baseValue * this.EXTRAS_TAX;
         extrasBreakdown[idx].tax = taxOnThisExtra;
@@ -487,7 +487,7 @@ class PricingService {
     const { serviceId, date, time, duration = 2, userId } = options;
     const db = await getDb();
 
-    const basePrice = await new Promise((resolve, reject) => {
+    const basePrice = await new Promise((resolve, _reject) => {
       db.get(
         'SELECT base_price FROM services WHERE id = ?',
         [serviceId],
@@ -737,7 +737,7 @@ class PricingService {
   async getPriceHistory(serviceId, daysBack = 30) {
     const db = await getDb();
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT
           DATE(booking_date) as date,
@@ -854,7 +854,7 @@ class PricingService {
     const db = getDb();
 
     try {
-      await new Promise((resolve, reject) => {
+      await new Promise((resolve, _reject) => {
         db.run(
           `UPDATE bookings
            SET payment_status = 'paid',

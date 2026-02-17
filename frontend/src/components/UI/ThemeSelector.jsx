@@ -1,20 +1,22 @@
 'use client';
 
-import React, { useContext } from 'react';
-import { ThemeContext, THEME_MODES } from '../../context/ThemeContext';
+import React from 'react';
+import { useTheme, THEME_MODES } from '../../context/ThemeContext';
 
 /**
  * Theme Selector Component - Seletor de temas com 4 modos
  * Claro, Escuro, Alto Contraste e Pastel
  */
 export default function ThemeSelector() {
-  const { theme, setTheme } = useContext(ThemeContext);
+  const { theme, setTheme, cycleTheme } = useTheme();
 
   const themes = [
     { id: THEME_MODES.LIGHT, label: 'Claro', icon: '☀️' },
     { id: THEME_MODES.DARK, label: 'Escuro', icon: '🌙' },
     { id: THEME_MODES.HIGH_CONTRAST, label: 'Alto Contraste', icon: '◆' },
     { id: THEME_MODES.PASTEL, label: 'Pastel', icon: '🎨' },
+    { id: THEME_MODES.CYBERPUNK, label: 'Cyberpunk', icon: '🤖' },
+    { id: THEME_MODES.FOREST, label: 'Floresta', icon: '🌲' }
   ];
 
   return (
@@ -38,6 +40,15 @@ export default function ThemeSelector() {
           <span className="hidden sm:inline">{t.label}</span>
         </button>
       ))}
+      {/* quick cycle button */}
+      <button
+        onClick={cycleTheme}
+        className="p-2 rounded transition-all duration-200 text-sm bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+        title="Alternar tema"
+        aria-label="Alternar tema"
+      >
+        ↻
+      </button>
     </div>
   );
 }

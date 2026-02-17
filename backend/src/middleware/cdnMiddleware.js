@@ -8,7 +8,7 @@ const logger = require('../utils/logger');
 /**
  * Middleware para adicionar headers de cache para assets
  */
-function cdnCacheHeaders(req, res, next) {
+function cdnCacheHeaders(req, res, _next) {
   // Detectar tipo de arquivo
   const path = req.path;
   
@@ -38,7 +38,7 @@ function cdnCacheHeaders(req, res, next) {
 /**
  * Middleware para compressão Gzip/Brotli
  */
-function enableCompression(req, res, next) {
+function enableCompression(req, res, _next) {
   // Acceptar compression
   res.setHeader('Vary', 'Accept-Encoding');
   
@@ -53,7 +53,7 @@ function enableCompression(req, res, next) {
 /**
  * Middleware para adicionar headers de segurança para assets
  */
-function assetSecurityHeaders(req, res, next) {
+function assetSecurityHeaders(req, res, _next) {
   res.set({
     'X-Content-Type-Options': 'nosniff',
     'X-Frame-Options': 'DENY',
@@ -66,7 +66,7 @@ function assetSecurityHeaders(req, res, next) {
 /**
  * Middleware para logging de downloads de assets
  */
-function logAssetDownload(req, res, next) {
+function logAssetDownload(req, res, _next) {
   const originalSend = res.send;
 
   res.send = function(data) {
@@ -89,7 +89,7 @@ function logAssetDownload(req, res, next) {
  * Middleware para redirecionar para versão otimizada
  * Se cliente aceita WebP, servir WebP ao invés de PNG/JPG
  */
-function serveOptimizedAsset(req, res, next) {
+function serveOptimizedAsset(req, res, _next) {
   const acceptsWebP = req.get('Accept')?.includes('image/webp');
   
   if (acceptsWebP && /\.(png|jpg|jpeg)$/.test(req.path)) {
@@ -110,7 +110,7 @@ function serveOptimizedAsset(req, res, next) {
 /**
  * Middleware para ETag de assets
  */
-function generateAssetETag(req, res, next) {
+function generateAssetETag(req, res, _next) {
   const originalJson = res.json;
 
   res.json = function(data) {

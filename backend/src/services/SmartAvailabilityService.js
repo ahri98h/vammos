@@ -17,7 +17,7 @@ class SmartAvailabilityService {
     const { date, time, serviceId, duration = 2 } = options;
     const db = await getDb();
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           s.id,
@@ -186,7 +186,7 @@ class SmartAvailabilityService {
   async getStaffRealTimeStatus(staffId) {
     const db = await getDb();
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.get(`
         SELECT 
           s.id,
@@ -292,7 +292,7 @@ class SmartAvailabilityService {
   async getWeeklyAvailabilityTrend(serviceId) {
     const db = await getDb();
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         WITH week_days AS (
           SELECT DATE(datetime('now', '+' || (rowid - 1) || ' days')) as date

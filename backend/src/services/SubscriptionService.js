@@ -14,7 +14,7 @@ class SubscriptionService {
    * Listar planos disponíveis
    */
   static getPlans() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(
@@ -34,7 +34,7 @@ class SubscriptionService {
   static async createSubscription(userId, planId, stripePaymentMethod) {
     const db = new sqlite3.Database(DB_PATH);
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, _reject) => {
       db.get(
         `SELECT stripe_price_id FROM subscription_plans WHERE id = ?`,
         [planId],
@@ -104,7 +104,7 @@ class SubscriptionService {
     try {
       const db = new sqlite3.Database(DB_PATH);
 
-      return new Promise(async (resolve, reject) => {
+      return new Promise(async (resolve, _reject) => {
         db.get(
           `SELECT PLACEHOLDER FROM user_subscriptions WHERE id = ?`,
           [subscriptionId],

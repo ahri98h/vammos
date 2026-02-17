@@ -109,7 +109,7 @@ function calculateAccumulative(bookings) {
     throw new Error('Provide array com pelo menos 1 booking')
   }
 
-  const results = bookings.map((b, idx) => ({
+  const results = bookings.map((b, _idx) => ({
     ...calculatePrice(b),
     index: idx + 1
   }))

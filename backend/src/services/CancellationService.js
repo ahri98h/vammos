@@ -13,7 +13,7 @@ class CancellationService {
    * Cancelar agendamento com motivo
    */
   static cancelBooking(bookingId, userId, reason, refundAmount) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.run(
@@ -45,7 +45,7 @@ class CancellationService {
    * Obter razões de cancelamento mais comuns
    */
   static getCancellationStatistics() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(

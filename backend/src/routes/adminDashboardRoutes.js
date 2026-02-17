@@ -21,7 +21,7 @@ function createAdminDashboardRoutes(db) {
   /**
    * Middleware: Verificar se é admin
    */
-  const requireAdmin = (req, res, next) => {
+  const requireAdmin = (req, res, _next) => {
     if (req.user?.role !== 'admin') {
       return res.status(403).json({
         success: false,

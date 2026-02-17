@@ -14,14 +14,14 @@ class ReportsService {
   /**
    * Gerar relatório de receita
    */
-  async generateBookingsReport(startDate, endDate, format = 'pdf') {
+  async generateBookingsReport(_startDate, _endDate, format = 'pdf') {
     try {
       const reportId = `report_${Date.now()}`;
       const report = {
         id: reportId,
         type: 'revenue',
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+        startDate: new Date(_startDate),
+        endDate: new Date(_endDate),
         format,
         generatedAt: new Date(),
         status: 'completed',
@@ -65,7 +65,7 @@ class ReportsService {
   /**
    * Gerar relatório de profissionais
    */
-  async generateProfessionalReport(startDate, endDate) {
+  async generateProfessionalReport(_startDate, _endDate) {
     const report = {
       id: `report_prof_${Date.now()}`,
       type: 'professional',
@@ -95,7 +95,7 @@ class ReportsService {
   /**
    * Gerar relatório de clientes
    */
-  async generateCustomerReport(startDate, endDate) {
+  async generateCustomerReport(_startDate, _endDate) {
     const report = {
       id: `report_cust_${Date.now()}`,
       type: 'customer',

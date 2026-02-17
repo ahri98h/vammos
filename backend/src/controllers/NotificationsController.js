@@ -82,7 +82,7 @@ const NotificationsController_Auto_67 = {
 
       // limpar subscriptions expiradas
       const remaining = [];
-      results.forEach((r, idx) => {
+      results.forEach((r, _idx) => {
         if (r.status === 'fulfilled') remaining.push(list[idx]);
         else {
           const err = r.reason || r;

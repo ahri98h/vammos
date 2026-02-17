@@ -79,7 +79,7 @@ class ChatController {
    */
   static async downloadEncryptedFile(req, res) {
     try {
-      const { conversationId } = req.params;
+      const { _conversationId } = req.params;
       const { encryptionKey } = req.query;
       const userId = req.user.id;
 
@@ -269,7 +269,6 @@ class ChatController {
   static async getMessageHash(req, res) {
     try {
       const { messageId } = req.params;
-      const userId = req.user.id;
 
       // Simular busca
       // const message = await db.chat_messages.findById(messageId);

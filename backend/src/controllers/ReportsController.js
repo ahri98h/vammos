@@ -10,8 +10,8 @@ const ReportsService = require('../services/ReportsService');
 // POST /api/reports/revenue
 router.post('/revenue', async (req, res) => {
   try {
-    const { startDate, endDate, format = 'pdf' } = req.body;
-    const report = await ReportsService.generateRevenueReport(startDate, endDate, format);
+    const { startDate, _endDate, format = 'pdf' } = req.body;
+    const report = await ReportsService.generateRevenueReport(_startDate, _endDate, format);
     res.status(201).json(report);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -22,7 +22,7 @@ router.post('/revenue', async (req, res) => {
 router.post('/professional', async (req, res) => {
   try {
     const { startDate, endDate } = req.body;
-    const report = await ReportsService.generateProfessionalReport(startDate, endDate);
+    const report = await ReportsService.generateProfessionalReport(_startDate, _endDate);
     res.status(201).json(report);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -33,7 +33,7 @@ router.post('/professional', async (req, res) => {
 router.post('/customer', async (req, res) => {
   try {
     const { startDate, endDate } = req.body;
-    const report = await ReportsService.generateCustomerReport(startDate, endDate);
+    const report = await ReportsService.generateCustomerReport(_startDate, _endDate);
     res.status(201).json(report);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -63,7 +63,7 @@ router.post('/satisfaction', async (req, res) => {
 // POST /api/reports/custom
 router.post('/custom', async (req, res) => {
   try {
-    const { name, filters, metrics, startDate, endDate } = req.body;
+    const { name, filters, metrics, _startDate, endDate } = req.body;
     const report = await ReportsService.generateCustomReport({
       name,
       filters,

@@ -20,7 +20,7 @@ class RecommendationService_Auto_214 {
       const db = await getDb();
 
       // 1. Buscar serviços frequentemente comprados junto com o atual
-      const frequentlyBought = await new Promise((resolve, reject) => {
+      const frequentlyBought = await new Promise((resolve, _reject) => {
         db.all(
           `
           SELECT 
@@ -73,7 +73,7 @@ class RecommendationService_Auto_214 {
    */
   async RecommendationService_Auto_214(db, userId, currentServiceId, limit) {
     try {
-      const userHistory = await new Promise((resolve, reject) => {
+      const userHistory = await new Promise((resolve, _reject) => {
         db.all(
           `
           SELECT DISTINCT s.id, s.name, s.base_price
@@ -98,7 +98,7 @@ class RecommendationService_Auto_214 {
       return userHistory
         .filter(s => s.id !== currentServiceId)
         .slice(0, limit)
-        .map((rec, idx) => ({
+        .map((rec, _idx) => ({
           ...rec,
           reason: 'Baseado no seu histórico',
           avg_rating: 4.5
@@ -115,7 +115,7 @@ class RecommendationService_Auto_214 {
   deduplicateAndRank(frequentlyBought, personalized, limit) {
     const combined = new Map();
 
-    frequentlyBought.forEach((rec, idx) => {
+    frequentlyBought.forEach((rec, _idx) => {
       const key = rec.id;
       combined.set(key, {
         ...rec,
@@ -124,7 +124,7 @@ class RecommendationService_Auto_214 {
       });
     });
 
-    personalized.forEach((rec, idx) => {
+    personalized.forEach((rec, _idx) => {
       const key = rec.id;
       if (!combined.has(key)) {
         combined.set(key, {
@@ -145,7 +145,7 @@ class RecommendationService_Auto_214 {
    */
   async getPopularServices(db, limit = 5) {
     try {
-      const popular = await new Promise((resolve, reject) => {
+      const popular = await new Promise((resolve, _reject) => {
         db.all(
           `
           SELECT 
@@ -182,7 +182,7 @@ class RecommendationService_Auto_214 {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const atRisk = await new Promise((resolve, reject) => {
+      const atRisk = await new Promise((resolve, _reject) => {
         db.all(
           `
           SELECT 
@@ -232,7 +232,7 @@ class RecommendationService_Auto_214 {
     return {
       userId,
       currentService: currentServiceId,
-      recommendations: (complementary[currentServiceId] || []).map((service, idx) => ({
+      recommendations: (complementary[currentServiceId] || []).map((service, _idx) => ({
         service,
         crossSell: true,
         estimatedRevenue: `R$ ${(50 + idx * 25).toFixed(2)}`

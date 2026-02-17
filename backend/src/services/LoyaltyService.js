@@ -13,7 +13,7 @@ class LoyaltyService {
    * Adicionar pontos ao usuário
    */
   static addPoints(userId, points, reason, bookingId = null) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.run(
@@ -47,7 +47,7 @@ class LoyaltyService {
    * Resgatar pontos
    */
   static redeemPoints(userId, pointsToRedeem, rewardId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       // Verificar saldo
@@ -97,7 +97,7 @@ class LoyaltyService {
    * Obter recompensas disponíveis
    */
   static getRewards() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(

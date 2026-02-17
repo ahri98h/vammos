@@ -87,7 +87,7 @@ const prometheus_Auto_43 = new promClient.Histogram({
 /**
  * Middleware para medir tempo de requisição HTTP
  */
-function metricsMiddleware(req, res, next) {
+function metricsMiddleware(req, res, _next) {
   const start = Date.now();
   const originalJson = res.json.bind(res);
 

@@ -281,7 +281,7 @@ const paymentSchemas = {
  * Middleware validador genérico
  */
 function validateSchema(schema, options = {}) {
-  return (req, res, next) => {
+  return (req, res, _next) => {
     const { error, value } = schema.validate(req.body, {
       abortEarly: false,
       stripUnknown: true, // Remove campos não esperados

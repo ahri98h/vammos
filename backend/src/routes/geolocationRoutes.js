@@ -78,7 +78,7 @@ router.get('/addresses', authenticateToken, async (req, res) => {
     const userId = req.user.id;
     const db = require('../database');
     
-    const addresses = await new Promise((resolve, reject) => {
+    const addresses = await new Promise((resolve, _reject) => {
       db.all('SELECT * FROM user_addresses WHERE user_id = ?', [userId], (err, rows) => {
         if (err) reject(err);
         else resolve(rows);

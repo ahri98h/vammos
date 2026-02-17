@@ -12,6 +12,8 @@ export default function Footer() {
   const [loading, setLoading] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [error, setError] = useState(null);
+  const [discountCode, setDiscountCode] = useState(null);
+  const [copied, setCopied] = useState(false);
   const currentYear = new Date().getFullYear();
 
   const handleSubscribe = async (e) => {
@@ -36,11 +38,24 @@ export default function Footer() {
 
       setSubscribed(true);
       setEmail('');
+      // atribui cupom padrão após inscrição
+      setDiscountCode('LC10OFF');
       setTimeout(() => setSubscribed(false), 3000);
     } catch (err) {
       setError(err.message || 'Erro ao inscrever. Tente novamente.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const copyCode = async () => {
+    if (!discountCode || !navigator?.clipboard) return;
+    try {
+      await navigator.clipboard.writeText(discountCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (err) {
+      // ignore
     }
   };
 
@@ -90,8 +105,8 @@ export default function Footer() {
             <h3 className="text-2xl sm:text-3xl font-bold mb-3">Pronto para Agendar?</h3>
             <p className="text-blue-100 mb-6 text-lg">Solicite um orçamento sem compromisso hoje mesmo</p>
             <Link href="/agendar" className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-lg font-bold hover:shadow-lg hover:scale-105 transition-all">
-                <span>📅</span>
-                Agendar Agora
+              <span>📅</span>
+              Agendar Agora — 10% OFF
             </Link>
           </div>
         </div>
@@ -135,10 +150,12 @@ export default function Footer() {
             {/* Contact Info */}
             <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
               <p className="flex items-center gap-2">
-                <span>📞</span> +55 51 98030-3740
+                <span>📞</span>
+                <a href="tel:+5551980303740" className="hover:underline">+55 51 98030-3740</a>
               </p>
               <p className="flex items-center gap-2">
-                <span>📧</span> contato@leidycleaner.com
+                <span>📧</span>
+                <a href="mailto:contato@leidycleaner.com" className="hover:underline">contato@leidycleaner.com</a>
               </p>
               <p className="flex items-center gap-2">
                 <span>📍</span> Porto Alegre, RS - Brasil
@@ -194,9 +211,16 @@ export default function Footer() {
               </button>
             </form>
             {subscribed && (
-              <p className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2 animate-pulse">
-                ✅ Inscrição realizada com sucesso!
-              </p>
+              <div className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2 flex-col sm:flex-row">
+                <p className="animate-pulse">✅ Inscrição realizada com sucesso!</p>
+                {discountCode && (
+                  <div className="flex items-center gap-2 ml-0 sm:ml-3">
+                    <span>Use o cupom</span>
+                    <strong className="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded">{discountCode}</strong>
+                    <button onClick={copyCode} className="ml-2 text-sm underline">{copied ? 'Copiado!' : 'Copiar'}</button>
+                  </div>
+                )}
+              </div>
             )}
             {error && (
               <p className="text-sm text-red-600 dark:text-red-400 flex items-center gap-2">

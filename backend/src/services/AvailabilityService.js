@@ -12,7 +12,7 @@ class AvailabilityService {
    * Obter slots disponíveis para um período
    */
   static getAvailableSlots(professionalId, date, durationHours = 2) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
       
       const dayOfWeek = new Date(date).getDay();
@@ -72,7 +72,7 @@ class AvailabilityService {
    * Obter disponibilidade para próximos 30 dias
    */
   static getCalendarAvailability(professionalId, durationHours = 2, days = 30) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const availability = [];
       let processed = 0;
 
@@ -103,7 +103,7 @@ class AvailabilityService {
    * Bloquear um horário (manual block)
    */
   static blockTimeSlot(professionalId, date, time, reason = 'Manual block') {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.run(

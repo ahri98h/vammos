@@ -133,7 +133,7 @@ class BookingResponseDto {
 /**
  * Payment DTOs
  */
-class index_Auto_101 {
+class CreatePaymentDto {
   constructor(bookingId, amount) {
     this.bookingId = bookingId;
     this.amount = amount;
@@ -147,7 +147,7 @@ class index_Auto_101 {
   }
 }
 
-class index_Auto_101 {
+class PaymentResponseDto {
   constructor(payment) {
     this.id = payment.id;
     this.transactionId = payment.transaction_id;
@@ -165,7 +165,7 @@ class index_Auto_101 {
 /**
  * Review DTOs
  */
-class index_Auto_101 {
+class CreateReviewDto {
   constructor(bookingId, rating, comment = null, photos = []) {
     this.bookingId = bookingId;
     this.rating = rating;
@@ -219,7 +219,7 @@ class ErrorResponseDto {
  * Middleware para converter request em DTO
  */
 function dtoMiddleware(DtoClass) {
-  return (req, res, next) => {
+  return (req, res, _next) => {
     try {
       const dto = new DtoClass(...Object.values(req.body));
       const validation = dto.validate();
@@ -246,11 +246,10 @@ module.exports = {
   LoginRequestDto,
   RegisterRequestDto,
   AuthResponseDto,
-  index_Auto_101,
+  CreatePaymentDto,
   BookingResponseDto,
-  index_Auto_101,
-  index_Auto_101,
-  index_Auto_101,
+  PaymentResponseDto,
+  CreateReviewDto,
   ReviewResponseDto,
   ErrorResponseDto,
   dtoMiddleware

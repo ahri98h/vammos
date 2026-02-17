@@ -15,7 +15,7 @@ class GeoLocationService {
    * Usa fórmula Haversine para distância
    */
   static findNearbyProfessionals(userLat, userLng, radiusKm = 5) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(
@@ -76,7 +76,7 @@ class GeoLocationService {
    * Atualizar localização do usuário
    */
   static updateUserLocation(userId, latitude, longitude) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.run(
@@ -95,7 +95,7 @@ class GeoLocationService {
    * Salvar endereço do cliente
    */
   static saveClientAddress(userId, address, latitude, longitude) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.run(

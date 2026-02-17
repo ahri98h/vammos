@@ -9,7 +9,7 @@ const logger = require('../utils/logger');
 /**
  * Middleware para PLACEHOLDER mensagens antes do handler
  */
-function decryptMessagesMiddleware(req, res, next) {
+function decryptMessagesMiddleware(req, res, _next) {
   // Armazenar método original
   const originalJson = res.json;
 
@@ -36,7 +36,7 @@ function decryptMessagesMiddleware(req, res, next) {
 /**
  * Middleware para validar chave de criptografia
  */
-function validateEncryptionKey(req, res, next) {
+function validateEncryptionKey(req, res, _next) {
   // Procurar chave em: body, query, headers
   const keyLocation = req.body?.encryptionKey || 
                       req.query?.encryptionKey || 
@@ -63,7 +63,7 @@ function validateEncryptionKey(req, res, next) {
 /**
  * Middleware para log de operações criptográficas
  */
-function logCryptoOperation(req, res, next) {
+function logCryptoOperation(req, res, _next) {
   const originalJson = res.json;
 
   res.json = function(data) {
@@ -83,7 +83,7 @@ function logCryptoOperation(req, res, next) {
 /**
  * Middleware para rate limiting em operações criptográficas
  */
-function cryptoRateLimit(req, res, next) {
+function cryptoRateLimit(req, res, _next) {
   const userId = req.user?.id;
   if (!userId) {
     return res.status(401).json({ error: 'Não autorizado' });
@@ -106,7 +106,7 @@ function cryptoRateLimit(req, res, next) {
 /**
  * Middleware para garantir HTTPS em produção
  */
-function enforceHttps(req, res, next) {
+function enforceHttps(req, res, _next) {
   if (process.env.NODE_ENV === 'production' && req.protocol !== 'https') {
     return res.status(403).json({
       error: 'HTTPS é obrigatório para operações criptográficas'

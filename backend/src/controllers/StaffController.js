@@ -111,7 +111,7 @@ class StaffController {
   async getBookingHistory(req, res) {
     try {
       const { staffId } = req.params || req.user.id;
-      const { status, startDate, endDate, limit = 50, offset = 0 } = req.query;
+      const { status, _startDate, _endDate, limit = 50, offset = 0 } = req.query;
 
       const userId = staffId || req.user.id;
 
@@ -144,15 +144,15 @@ class StaffController {
         paramCount++;
       }
 
-      if (startDate) {
+      if (_startDate) {
         query += ` AND b.date >= $${paramCount}`;
-        params.push(startDate);
+        params.push(_startDate);
         paramCount++;
       }
 
-      if (endDate) {
+      if (_endDate) {
         query += ` AND b.date <= $${paramCount}`;
-        params.push(endDate);
+        params.push(_endDate);
         paramCount++;
       }
 
@@ -282,15 +282,15 @@ class StaffController {
       const params = [userId];
       let paramCount = 2;
 
-      if (startDate) {
+      if (_startDate) {
         query += ` AND date >= $${paramCount}`;
-        params.push(startDate);
+        params.push(_startDate);
         paramCount++;
       }
 
-      if (endDate) {
+      if (_endDate) {
         query += ` AND date <= $${paramCount}`;
-        params.push(endDate);
+        params.push(_endDate);
         paramCount++;
       }
 

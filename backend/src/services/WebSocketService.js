@@ -27,7 +27,7 @@ class WebSocketService {
    * Middleware de autenticação para Socket.io
    */
   setupAuthentication() {
-    this.io.use((socket, next) => {
+    this.io.use((socket, _next) => {
       const token = socket.handshake.auth.token;
 
       if (!token) {

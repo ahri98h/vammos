@@ -49,10 +49,9 @@ const envSchema = z.object({
   TWILIO_ACCOUNT_SID: z.string().optional(),
   TWILIO_AUTH_TOKEN: z.string().optional(),
   TWILIO_PHONE_NUMBER: z.string().optional(),
-  PLACEHOLDER: z.string().optional(),
   
   // PIX
-  PLACEHOLDER: z.string().min(32),
+  PIX_KEY: z.string().min(32),
   
   // Sentry
   SENTRY_DSN: sentryDsnSchema,
@@ -61,8 +60,8 @@ const envSchema = z.object({
   // S3/Upload
   AWS_S3_BUCKET: z.string().optional(),
   AWS_REGION: z.string().optional(),
-  PLACEHOLDER: z.string().optional(),
-  PLACEHOLDER: z.string().optional(),
+  AWS_ACCESS_KEY_ID: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
   
   // Redis (optional)
   REDIS_URL: z.string().optional(),

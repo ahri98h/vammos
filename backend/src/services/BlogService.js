@@ -14,7 +14,7 @@ class BlogService {
    * Criar post de blog
    */
   static createPost(title, content, author, keywords = [], excerpt = '') {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       const postSlug = slug(title).toLowerCase();
@@ -37,7 +37,7 @@ class BlogService {
    * Obter post por slug
    */
   static getPostBySlug(slug) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.get(
@@ -70,7 +70,7 @@ class BlogService {
    * Listar posts (com paginação)
    */
   static listPosts(page = 1, limit = 10) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
       const offset = (page - 1) * limit;
 
@@ -94,7 +94,7 @@ class BlogService {
    * Buscar posts por keyword
    */
   static searchPosts(query) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(
@@ -120,7 +120,7 @@ class BlogService {
    * Gerar sitemap XML para SEO
    */
   static generateSitemap(baseUrl) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(
@@ -151,7 +151,7 @@ class BlogService {
    * Obter dados meta para SEO
    */
   static getPostMeta(slug) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.get(

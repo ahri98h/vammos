@@ -49,7 +49,7 @@ class IntelligentCrossSellingService {
    * @private
    */
   async _getCustomerServiceHistory(db, userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           s.id,
@@ -79,7 +79,7 @@ class IntelligentCrossSellingService {
    * @private
    */
   async _getFrequentlyBoughtTogether(db, serviceId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           s2.id,
@@ -117,7 +117,7 @@ class IntelligentCrossSellingService {
    * @private
    */
   async _getComplementaryServices(db, serviceId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           s.id,
@@ -155,7 +155,7 @@ class IntelligentCrossSellingService {
    * @private
    */
   async _getUpsellOptions(db, serviceId, customerHistory) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.get(`
         SELECT base_price FROM services WHERE id = ?
       `, [serviceId], (err, row) => {
@@ -353,7 +353,7 @@ class IntelligentCrossSellingService {
   async trackCrossSellingEvent(db, options) {
     const { userId, recommendedServiceId, viewedAt, clickedAt, purchased } = options;
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.run(`
         INSERT INTO cross_selling_events 
         (user_id, recommended_service_id, viewed_at, clicked_at, purchased, created_at)

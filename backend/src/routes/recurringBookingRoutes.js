@@ -7,7 +7,7 @@ const router = express.Router();
 // Criar agendamento recorrente
 router.post('/create', authenticateToken, async (req, res) => {
   try {
-    const { professionalId, serviceId, dayOfWeek, time, frequency, startDate, endDate } = req.body;
+    const { professionalId, serviceId, dayOfWeek, time, frequency, _startDate, endDate } = req.body;
     const userId = req.user.id;
 
     if (!professionalId || !serviceId || dayOfWeek === undefined || !time) {

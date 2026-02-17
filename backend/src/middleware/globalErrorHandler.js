@@ -197,7 +197,7 @@ const createRateLimiter = (maxRequests = 100, windowMs = 60000) => {
  */
 const asyncHandler = (fn) => {
   return (req, res, next) => {
-    Promise.resolve(fn(req, res, next)).catch(next);
+    Promise.resolve(fn(req, res, _next)).catch(_next);
   };
 };
 
@@ -216,7 +216,7 @@ const createAsyncHandler = (fn, options = {}) => {
       }
       
       // Executar handler
-      await fn(req, res, next);
+      await fn(req, res, _next);
     } catch (error) {
       next(error);
     }

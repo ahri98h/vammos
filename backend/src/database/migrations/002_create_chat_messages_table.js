@@ -3,9 +3,9 @@
  * Para criptografia end-to-end de mensagens privadas
  */
 
-// Migration 002_create_chat_messages_table_Auto_91.js
+// Migration: Create chat messages table for E2E encrypted messaging
 
-const 002_create_chat_messages_table_Auto_91 = `
+const CREATE_CHAT_MESSAGES_TABLE_SQL = `
   CREATE TABLE IF NOT EXISTS chat_messages (
     id TEXT PRIMARY KEY,
     conversation_id TEXT NOT NULL,
@@ -25,14 +25,14 @@ const 002_create_chat_messages_table_Auto_91 = `
     FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
   );
 
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON chat_messages(conversation_id);
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON chat_messages(sender_id);
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON chat_messages(receiver_id);
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON chat_messages(created_at DESC);
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON chat_messages(receiver_id, is_read);
+  CREATE INDEX IF NOT EXISTS idx_chat_messages_conversation ON chat_messages(conversation_id);
+  CREATE INDEX IF NOT EXISTS idx_chat_messages_sender ON chat_messages(sender_id);
+  CREATE INDEX IF NOT EXISTS idx_chat_messages_receiver ON chat_messages(receiver_id);
+  CREATE INDEX IF NOT EXISTS idx_chat_messages_created_at ON chat_messages(created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_chat_messages_read_status ON chat_messages(receiver_id, is_read);
 `;
 
-const 002_create_chat_messages_table_Auto_91 = `
+const CREATE_CONVERSATIONS_TABLE_SQL = `
   CREATE TABLE IF NOT EXISTS conversations (
     id TEXT PRIMARY KEY,
     user1_id TEXT NOT NULL,
@@ -46,11 +46,11 @@ const 002_create_chat_messages_table_Auto_91 = `
     FOREIGN KEY (user2_id) REFERENCES users(id) ON DELETE CASCADE
   );
 
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON conversations(user1_id, user2_id);
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON conversations(last_message_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_conversations_users ON conversations(user1_id, user2_id);
+  CREATE INDEX IF NOT EXISTS idx_conversations_last_message ON conversations(last_message_at DESC);
 `;
 
-const 002_create_chat_messages_table_Auto_91 = `
+const CREATE_ENCRYPTED_FILES_TABLE_SQL = `
   CREATE TABLE IF NOT EXISTS encrypted_files (
     id TEXT PRIMARY KEY,
     conversation_id TEXT NOT NULL,
@@ -69,11 +69,11 @@ const 002_create_chat_messages_table_Auto_91 = `
     FOREIGN KEY (uploader_id) REFERENCES users(id) ON DELETE CASCADE
   );
 
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON encrypted_files(conversation_id);
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON encrypted_files(uploader_id);
+  CREATE INDEX IF NOT EXISTS idx_encrypted_files_conversation ON encrypted_files(conversation_id);
+  CREATE INDEX IF NOT EXISTS idx_encrypted_files_uploader ON encrypted_files(uploader_id);
 `;
 
-const 002_create_chat_messages_table_Auto_91 = `
+const CREATE_CRYPTO_AUDIT_LOG_TABLE_SQL = `
   CREATE TABLE IF NOT EXISTS crypto_audit_log (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL,
@@ -88,22 +88,22 @@ const 002_create_chat_messages_table_Auto_91 = `
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
   );
 
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON crypto_audit_log(user_id);
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON crypto_audit_log(operation);
-  CREATE INDEX IF NOT EXISTS 002_create_chat_messages_table_Auto_91 ON crypto_audit_log(created_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_crypto_audit_user_id ON crypto_audit_log(user_id);
+  CREATE INDEX IF NOT EXISTS idx_crypto_audit_operation ON crypto_audit_log(operation);
+  CREATE INDEX IF NOT EXISTS idx_crypto_audit_created_at ON crypto_audit_log(created_at DESC);
 `;
 
 module.exports = {
-  002_create_chat_messages_table_Auto_91,
-  002_create_chat_messages_table_Auto_91,
-  002_create_chat_messages_table_Auto_91,
-  002_create_chat_messages_table_Auto_91,
+  CREATE_CHAT_MESSAGES_TABLE_SQL,
+  CREATE_CONVERSATIONS_TABLE_SQL,
+  CREATE_ENCRYPTED_FILES_TABLE_SQL,
+  CREATE_CRYPTO_AUDIT_LOG_TABLE_SQL,
   runMigrations: async (db) => {
     try {
-      await db.exec(002_create_chat_messages_table_Auto_91);
-      await db.exec(002_create_chat_messages_table_Auto_91);
-      await db.exec(002_create_chat_messages_table_Auto_91);
-      await db.exec(002_create_chat_messages_table_Auto_91);
+      await db.exec(CREATE_CHAT_MESSAGES_TABLE_SQL);
+      await db.exec(CREATE_CONVERSATIONS_TABLE_SQL);
+      await db.exec(CREATE_ENCRYPTED_FILES_TABLE_SQL);
+      await db.exec(CREATE_CRYPTO_AUDIT_LOG_TABLE_SQL);
     } catch (error) {
       console.error('❌ Chat migration failed:', error);
       throw error;

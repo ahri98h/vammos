@@ -113,7 +113,7 @@ class DatabaseOptimizationService_Auto_185 {
 
     return {
       totalQueries: this.queryStats.size,
-      topQueries: sorted.map((stat, idx) => ({
+      topQueries: sorted.map((stat, _idx) => ({
         rank: idx + 1,
         query: stat.query.substring(0, 80),
         execCount: stat.execCount,

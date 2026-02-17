@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 
 export const ThemeContext = createContext();
 
@@ -152,4 +152,13 @@ export function ThemeProvider({ children }) {
 }
 
 export default ThemeProvider;
+
+// Hook helper: useTheme - evita importar o contexto manualmente em componentes
+export function useTheme() {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) {
+    throw new Error('useTheme must be used within ThemeProvider');
+  }
+  return ctx;
+}
 

@@ -239,7 +239,7 @@ class AnalyticsService {
    * Revenue metrics from database
    */
   async getRevenueMetrics(db, daysBack) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.get(`
         SELECT 
           COUNT(DISTINCT b.id) as total_bookings,
@@ -273,7 +273,7 @@ class AnalyticsService {
    * Booking metrics
    */
   async getBookingMetrics(db, daysBack) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           DATE(b.booking_date) as date,
@@ -322,7 +322,7 @@ class AnalyticsService {
    * Staff metrics and ranking
    */
   async getStaffMetrics(db, daysBack) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           s.id,
@@ -382,7 +382,7 @@ class AnalyticsService {
    * Customer metrics
    */
   async getCustomerMetrics(db, daysBack) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.get(`
         SELECT 
           COUNT(DISTINCT u.id) as total_customers,
@@ -422,7 +422,7 @@ class AnalyticsService {
    * Trend analysis by day of week
    */
   async getTrendAnalysis(db, daysBack) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           STRFTIME('%w', b.booking_date) as day_of_week,
@@ -515,7 +515,7 @@ class AnalyticsService {
   async getChurnAnalysis(_daysThreshold = 60) {
     const db = await getDb();
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.all(`
         SELECT 
           u.id,

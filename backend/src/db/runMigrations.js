@@ -25,7 +25,7 @@ if (!fs.existsSync(dir)) {
 }
 
 async function runMigrations() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     const db = new sqlite3.Database(DB_PATH, (err) => {
       if (err) {
         console.error('❌ Erro ao conectar ao banco:', err);

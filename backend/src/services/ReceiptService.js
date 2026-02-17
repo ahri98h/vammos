@@ -33,7 +33,7 @@ class ReceiptService {
    * Gerar PDF de recibo
    */
   static generateReceiptPDF(booking, user, professional) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       try {
         const doc = new PDFDocument();
         const filename = `recibo_${booking.id}_${Date.now()}.pdf`;
@@ -90,7 +90,7 @@ class ReceiptService {
           resolve({ filepath, filename, url: `/uploads/${filename}` });
         });
 
-        stream.on('error', reject);
+        stream.on('error', _reject);
       } catch (error) {
         reject(error);
       }

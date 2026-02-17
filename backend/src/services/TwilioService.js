@@ -14,7 +14,8 @@ class TwilioService {
   initializeClient() {
     const logger = require('../utils/logger');
     if (!this.accountSid || !this.authToken) {
-      logger.warn('Twilio not configured: missing TWILIO_ACCOUNT_SID or TWILIO_AUTH_TOKEN');\n      return;
+      logger.warn('Twilio not configured: missing TWILIO_ACCOUNT_SID or TWILIO_AUTH_TOKEN');
+      return;
     }
 
     try {

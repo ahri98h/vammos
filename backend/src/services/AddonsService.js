@@ -13,7 +13,7 @@ class AddonsService {
    * Listar add-ons disponíveis
    */
   static getAvailableAddons() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(
@@ -31,7 +31,7 @@ class AddonsService {
    * Adicionar add-on ao agendamento
    */
   static addToBooking(bookingId, addonId, quantity = 1) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       // Obter preço do addon
@@ -79,7 +79,7 @@ class AddonsService {
    * Obter add-ons de um booking
    */
   static getBookingAddons(bookingId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(

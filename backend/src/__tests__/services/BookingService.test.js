@@ -11,8 +11,8 @@ jest.mock('../../db/sqlite', () => ({
   }))
 }));
 
-const BookingService = require('../../services/BookingService');
-const { getDb } = require('../../db/sqlite');
+// BookingService is exported as an instance, not a class
+const bookingService = require('../../services/BookingService');
 
 describe('BookingService', () => {
   let bookingService;
@@ -45,7 +45,7 @@ describe('BookingService', () => {
     });
 
     test('should have multiple public methods', () => {
-      const methods = Object.keys(bookingService).filter(
+      const _methods = Object.keys(bookingService).filter(
         prop => typeof bookingService[prop] === 'function'
       );
       // Check if main methods exist
@@ -128,13 +128,6 @@ describe('BookingService', () => {
     test('should generate unique booking ID', async () => {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + 1);
-      
-      const bookingData = {
-        userId: '1',
-        date: futureDate.toISOString(),
-        teamMemberId: '1',
-        services: ['cleaning']
-      };
       
       // Just check that method exists and tries to create
       expect(bookingService.createBooking).toBeDefined();

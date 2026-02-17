@@ -51,7 +51,7 @@ class AvatarService {
       logger.info(`Avatar salvo: ${uniqueName}`);
 
       // Atualizar banco de dados
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         db.get().run(
           'UPDATE users SET avatar_url = ?, avatar_updated_at = datetime("now") WHERE id = ?',
           [relativePath, userId],
@@ -81,7 +81,7 @@ class AvatarService {
    * Obter avatar do usuário
    */
   static async getAvatar(userId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.get().get(
         'SELECT avatar_url, avatar_updated_at FROM users WHERE id = ?',
         [userId],
@@ -114,7 +114,7 @@ class AvatarService {
       }
 
       // Atualizar banco
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve, _reject) => {
         db.get().run(
           'UPDATE users SET avatar_url = NULL, avatar_updated_at = NULL WHERE id = ?',
           [userId],
@@ -141,7 +141,7 @@ class AvatarService {
   static async updateProfile(userId, profileData) {
     const { name, phone, bio, social_links } = profileData;
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.get().run(
         `UPDATE users SET 
           name = COALESCE(?, name),

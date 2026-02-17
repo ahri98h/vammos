@@ -35,7 +35,7 @@ class RoutingService {
   /**
    * Estimar tempo de deslocamento
    */
-  async estimateTravelTime(from, to) {
+  async estimateTravelTime(_from, _to) {
     try {
       // Usar Google Maps API
       // const response = await googleMapsClient.distancematrix({

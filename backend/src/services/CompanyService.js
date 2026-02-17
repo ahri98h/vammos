@@ -11,7 +11,7 @@ class CompanyService {
    * Obter informações da empresa
    */
   static async getCompanyInfo() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.get().get('SELECT * FROM company_info WHERE id = 1', (err, row) => {
         if (err) {
           logger.error('Erro ao buscar informações da empresa:', err);
@@ -51,7 +51,7 @@ class CompanyService {
       privacy_policy
     } = data;
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const sql = `
         UPDATE company_info SET
           name = ?,
@@ -119,7 +119,7 @@ class CompanyService {
    * Obter dados bancários da empresa (apenas para admin)
    */
   static async getBankingInfo() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.get().get(
         `SELECT 
           bank_name, 
@@ -146,7 +146,7 @@ class CompanyService {
    * Obter dados públicos da empresa (sem informações sensíveis)
    */
   static async getPublicInfo() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       db.get().get(
         `SELECT 
           name,

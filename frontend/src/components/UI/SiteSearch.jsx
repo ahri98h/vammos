@@ -31,7 +31,7 @@ export default function SiteSearch({ className = '' }) {
       {/* Desktop inline search - Novo Design Moderno */}
       <form onSubmit={onSubmit} className={`relative hidden md:flex items-center ${className}`}>
         <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-          <img src="/api/external-image/7509de66-b366-439d-a86a-13ea31ebe121.jpeg" alt="Leidy Logo" className="search-logo" />
+          <img src="/images/logo-leidy.svg" alt="Leidy Logo" className="search-logo" />
         </div>
         <input
           aria-label="Buscar no site"
@@ -55,7 +55,7 @@ export default function SiteSearch({ className = '' }) {
           <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-start pt-24 px-4">
             <div className="w-full max-w-2xl mx-auto bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-2xl">
               <form onSubmit={onSubmit} className="flex items-center gap-3 mb-4">
-                <img src="/api/external-image/7509de66-b366-439d-a86a-13ea31ebe121.jpeg" alt="Leidy Logo" className="w-8 h-8 rounded-full search-logo" />
+                <img src="/images/logo-leidy.svg" alt="Leidy Logo" className="w-8 h-8 rounded-full search-logo" />
                 <input
                   autoFocus
                   value={q}

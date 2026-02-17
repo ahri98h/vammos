@@ -10,7 +10,7 @@ const logger = require('../utils/logger');
  * Middleware para rastrear tempo de execução das queries
  */
 function dbQueryTracker(db) {
-  return function(req, res, next) {
+  return function(req, res, _next) {
     // Interceptar métodos de query do banco
     const originalRun = db.run?.bind(db);
     const originalAll = db.all?.bind(db);
@@ -60,7 +60,7 @@ function dbQueryTracker(db) {
 /**
  * Middleware para log de queries preparadas
  */
-function logPreparedQueries(req, res, next) {
+function logPreparedQueries(req, res, _next) {
   if (process.env.DB_LOG_QUERIES === 'true') {
     logger.log({
       level: 'debug',
@@ -75,7 +75,7 @@ function logPreparedQueries(req, res, next) {
  * Middleware para cache de queries (se habilitado)
  */
 function queryCacheMiddleware(cache) {
-  return function(req, res, next) {
+  return function(req, res, _next) {
     if (!req.query.cache || req.method !== 'GET') {
       return next();
     }
@@ -104,7 +104,7 @@ function queryCacheMiddleware(cache) {
  * Middleware para monitorar conexões
  */
 function dbPoolMonitor() {
-  return function(req, res, next) {
+  return function(req, res, _next) {
     // Adicionar info de pool ao request
     req.dbPoolStats = {
       activeConnections: 0,

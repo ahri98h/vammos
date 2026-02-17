@@ -1,21 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-  <!-- Círculo externo -->
-  <circle cx="100" cy="100" r="95" stroke="#CCCCCC" stroke-width="3" fill="white"/>
-  
-  <!-- Letra P estilizada -->
-  <path d="M 70 65 L 70 135 M 70 85 Q 70 65 85 65 Q 100 65 100 80 Q 100 95 85 95 L 70 95" stroke="#0073B1" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  
-  <!-- Gota d'água -->
-  <ellipse cx="115" cy="75" rx="10" ry="16" fill="#0073B1"/>
-  <path d="M 115 91 Q 105 100 115 110 Q 125 100 115 91" fill="#0073B1"/>
-  
-  <!-- Folha verde -->
-  <path d="M 80 55 Q 85 50 88 55 Q 85 60 80 60" fill="#7CB342"/>
-  
-  <!-- Pincel blue -->
-  <path d="M 70 100 Q 85 95 100 105 Q 115 115 130 110" stroke="#0073B1" stroke-width="6" stroke-linecap="round" fill="none"/>
-  
-  <!-- Brilhos -->
-  <circle cx="135" cy="60" r="3" fill="#0073B1"/>
-  <circle cx="125" cy="55" r="2.5" fill="#0073B1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" aria-labelledby="title desc">
+  <title id="title">Leidy Cleaner logo</title>
+  <desc id="desc">Marca circular com monograma estilizado, folha, gota d'água e onda; texto LEIDY CLEANER SERVICES</desc>
+
+  <defs>
+    <linearGradient id="gBlue" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#2fb8ff" />
+      <stop offset="100%" stop-color="#0066d6" />
+    </linearGradient>
+    <linearGradient id="gGreen" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#7ee08a" />
+      <stop offset="100%" stop-color="#2fb85a" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="6" stdDeviation="12" flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Outer circle -->
+  <g filter="url(#shadow)">
+    <circle cx="512" cy="512" r="480" fill="#ffffff" stroke="#d8d8d8" stroke-width="6" />
+  </g>
+
+  <!-- Emblem group: stylized L + leaf + drop + sparkle -->
+  <g transform="translate(512,360)">
+    <!-- stylized L (looks like a ribbon) -->
+    <path d="M-160,-24 C-140,-60 -40,-92 24,-92 C98,-92 162,-48 192,-8 C222,32 212,86 170,118 C128,150 40,170 -20,158" fill="none" stroke="url(#gBlue)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- leaf above ribbon -->
+    <path d="M120,-78 C140,-68 168,-50 154,-26 C140,-2 112,6 96,-12 C80,-30 96,-88 120,-78 Z" fill="url(#gGreen)" />
+
+    <!-- drop accent -->
+    <path d="M188,-6 C196,10 196,34 176,52 C156,34 156,10 164,-6 C168,-14 180,-14 188,-6 Z" fill="url(#gBlue)" opacity="0.95"/>
+
+    <!-- small sparkle -->
+    <g transform="translate(240,-40) scale(1)">
+      <rect x="-6" y="-24" width="12" height="12" rx="2" fill="#ffffff" opacity="0.9" />
+      <path d="M0,-36 L3,-28 L11,-26 L3,-24 L0,-16 L-3,-24 L-11,-26 L-3,-28 Z" fill="#ffffff" opacity="0.8" transform="translate(-2,6) rotate(18)"/>
+    </g>
+  </g>
+
+  <!-- Wave (blue + green) under emblem -->
+  <g transform="translate(220,560)">
+    <path d="M0,0 C90,-20 170,-20 260,0 C350,20 430,20 520,0 C610,-20 690,-20 780,0" stroke="url(#gBlue)" stroke-width="24" fill="none" stroke-linecap="round"/>
+    <path d="M0,18 C90,-2 170,-2 260,18 C350,38 430,38 520,18 C610,-2 690,-2 780,18" stroke="url(#gGreen)" stroke-width="16" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Brand text -->
+  <text x="512" y="740" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="84" fill="url(#gBlue)">LEIDY</text>
+  <text x="512" y="806" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-weight="600" font-size="30" fill="#0066d6">CLEANER SERVICES</text>
+
 </svg>

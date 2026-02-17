@@ -23,12 +23,12 @@ router.use('/v2', v2Router);
 /**
  * Default version: /api/* maps to /api/v2/*
  */
-router.use((req, res, next) => {
+router.use((req, res, _next) => {
   // Se acessar /api/users, redirecionar para /api/v2/users
   if (!req.path.startsWith('/v1') && !req.path.startsWith('/v2')) {
     const newPath = `/v2${req.path}`;
     req.url = newPath;
-    return v2Router(req, res, next);
+    return v2Router(req, res, _next);
   }
   next();
 });
@@ -36,7 +36,7 @@ router.use((req, res, next) => {
 /**
  * Deprecation notice middleware
  */
-const deprecationNotice = (req, res, next) => {
+const deprecationNotice = (req, res, _next) => {
   if (req.path.includes('/v1')) {
     res.setHeader('Deprecation', 'true');
     res.setHeader('Sunset', new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toUTCString());

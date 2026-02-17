@@ -13,7 +13,7 @@ class ProfessionalRatingService_Auto_208 {
    * Adicionar avaliação do profissional
    */
   static rateProfessional(professionalId, adminId, rating, feedback) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.run(
@@ -51,7 +51,7 @@ class ProfessionalRatingService_Auto_208 {
    * Obter histórico de avaliações
    */
   static ProfessionalRatingService_Auto_208(professionalId) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(
@@ -74,7 +74,7 @@ class ProfessionalRatingService_Auto_208 {
    * Profissionais com avaliação baixa (flag para ação)
    */
   static ProfessionalRatingService_Auto_208(minRating = 3.0) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const db = new sqlite3.Database(DB_PATH);
 
       db.all(

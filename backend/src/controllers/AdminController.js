@@ -10,7 +10,7 @@ const DB_PATH = path.join(__dirname, '../../backend_data/limpeza.db');
 
 const getDb = () => new sqlite3.Database(DB_PATH);
 const getAsync = (db, sql, params = []) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     db.get(sql, params, (err, row) => {
       if (err) reject(err);
       else resolve(row);
@@ -19,7 +19,7 @@ const getAsync = (db, sql, params = []) => {
 };
 
 const allAsync = (db, sql, params = []) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     db.all(sql, params, (err, rows) => {
       if (err) reject(err);
       else resolve(rows || []);
@@ -144,7 +144,7 @@ class AdminController {
   async getBookingsList(req, res) {
     const db = getDb();
     try {
-      const { status, startDate, endDate, limit = 50, offset = 0 } = req.query;
+      const { status, _startDate, _endDate, limit = 50, offset = 0 } = req.query;
 
       let query = `
         SELECT 
@@ -171,14 +171,14 @@ class AdminController {
         params.push(status);
       }
 
-      if (startDate) {
+      if (_startDate) {
         query += ' AND b.date >= ?';
-        params.push(startDate);
+        params.push(_startDate);
       }
 
-      if (endDate) {
+      if (_endDate) {
         query += ' AND b.date <= ?';
-        params.push(endDate);
+        params.push(_endDate);
       }
 
       query += ' ORDER BY b.date DESC LIMIT ? OFFSET ?';

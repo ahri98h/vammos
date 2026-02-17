@@ -54,7 +54,7 @@ router.get('/sitemap', (req, res) => {
 // POST /api/marketing/campaigns
 router.post('/campaigns', async (req, res) => {
   try {
-    const { name, type, targetAudience, budget, startDate, endDate, content } = req.body;
+    const { name, type, targetAudience, budget, _startDate, _endDate, content } = req.body;
     const campaign = await SEOMarketingService.createMarketingCampaign({
       name,
       type,
